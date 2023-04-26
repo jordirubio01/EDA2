@@ -29,9 +29,9 @@ void user_option(int* op){
  * Pre: Recibe una opción válida
  * Post: Se ha realizado la opción correcta
  */
-void load_option(int op){
-    if (op == 1) return;
-    if (op == 2){
+void load_option(int op, FILE* f){
+    if (op == 1) ;
+    else if (op == 2){
         User new;
         FILE* f_user = fopen("EDA 2/users.txt", "w");
         fill_profile(&new, f_user);
