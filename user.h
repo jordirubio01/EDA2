@@ -12,4 +12,4 @@ typedef struct{
     char interests[5];
 } User;
 
-int fill_profile(User* user);
+int fill_profile(User* user, FILE* file);

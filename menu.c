@@ -33,6 +33,7 @@ void load_option(int op){
     if (op == 1) return;
     if (op == 2){
         User new;
-        fill_profile(&new);
+        FILE* f_user = fopen("EDA 2/users.txt", "w");
+        fill_profile(&new, f_user);
     }
 }
