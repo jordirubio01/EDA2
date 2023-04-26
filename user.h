@@ -6,7 +6,7 @@
 typedef struct{
     char name;
     char username;
-    int age;
+    int birth_date;
     char email;
     char location;
     char interests[5];
