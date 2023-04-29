@@ -18,8 +18,10 @@ typedef struct{
 
 int valid_password(int password);
 
+int valid_username(int username);
+
 void save_username(FILE* file, char username);
 
-void read_usernames(FILE* file);
+void read_username(FILE* file);
 
 int fill_profile(User* user, FILE* file);
