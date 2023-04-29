@@ -31,6 +31,7 @@ void user_option(int* op){
  */
 void load_option(int op, FILE* f){
     if (op == 1) ;
+        //PROGRAMA
     else if (op == 2){
         User new;
         FILE* f_user = fopen("EDA 2/users.txt", "w");
