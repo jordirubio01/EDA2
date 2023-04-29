@@ -9,7 +9,7 @@
 int valid_password()
 void read_usernames()
 int fill_profile(User* user, FILE* file){
-    char name[20], lastname[20], username[20], email[50], location[20]; int birth_date;
+    char name[MAX_LENGHT], lastname[MAX_LENGHT], username[MAX_LENGHT], email[50], location[MAX_LENGHT]; int birth_date;
     printf("Introduce tu nombre:\n");
     scanf("%s", name);
     printf("Introduce tu apellido:\n");
@@ -26,5 +26,5 @@ int fill_profile(User* user, FILE* file){
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
     printf("%s, ahora debes elegir un nombre de usuario y una contraseña.\n", name)
     printf("Usuario:\n");
-    scan
+    scanf()
 }
