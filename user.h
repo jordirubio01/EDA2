@@ -16,12 +16,8 @@ typedef struct{
     char interests[5];
 } User;
 
-int valid_password(int password);
+int valid_username(char username[MAX_LENGHT]);
 
-int valid_username(int username);
-
-void save_username(FILE* file, char username);
-
-void read_username(FILE* file);
+void save_usernames(FILE* file, char username);
 
 int fill_profile(User* user, FILE* file);
