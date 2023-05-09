@@ -6,7 +6,7 @@
 * Pre: -
 * Post: El menú ha sido imprimido por pantalla
 */
-void show_menu(){
+void show_first_menu(){
     printf("1.\tInicio\n2.\tRegistrarse\n");
 }
 

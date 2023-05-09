@@ -3,7 +3,7 @@
 
 #endif //LAB_0_MENU_H
 
-void show_menu();
+void show_first_menu();
 
 void user_option(int* op);
 
