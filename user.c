@@ -2,14 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "user.h"
-#define FALSE -1
+#define FALSE (-1)
 #define TRUE 1
 
 /**
 * Pre: Recibe un puntero a un usuario
 * Post: Los datos del usuario están completos
 */
-
 int valid_username(char username[MAX_LENGTH]){
     FILE* f_username = fopen("EDA 2/usernames.txt", "r");
     char current_username[MAX_LENGTH];
@@ -23,8 +22,11 @@ int valid_username(char username[MAX_LENGTH]){
     return TRUE;
 }
 
-
-int fill_profile(User* user, FILE* f_user){
+/**
+* Pre: Recibe un puntero a un usuario
+* Post: Los datos del usuario están completos
+*/
+User* fill_profile(User* user, FILE* f_user){
     char name[MAX_LENGTH], lastname[MAX_LENGTH], username[MAX_LENGTH];
     char email[MAIL_LENGTH], location[MAX_LENGTH];
     int birth_date;
@@ -39,9 +41,9 @@ int fill_profile(User* user, FILE* f_user){
     printf("Ciudad:\n");
     scanf("%s", location);
 
-    //GUARDEM LES DADES DEMANADES
+    // Guardamos los datos recibidos
     strcpy(user->name, name);
-    strcpy(user->lastname, name);
+    strcpy(user->surname, name);
     strcpy(user->email, email);
     strcpy(user->location, location);
     user->birth_date = birth_date;
@@ -60,5 +62,14 @@ int fill_profile(User* user, FILE* f_user){
     //Tenemos que comprobar que la contraseña sea válida (igual que el nombre de usuario)
     printf("Password:\n");
     scanf("%s", user->username);
-    return 0;
+    return user;
 }
+
+/*
+ * Pre: Recibe un archivo y un usuario
+ * Post: Los datos del usuario se han añadido al archivo
+ */
+void save_user(FILE* f, User* user){
+    fprintf(f, "%s %s %s %s\n", user->name, user->surname, user->username, user->password);
+}
+

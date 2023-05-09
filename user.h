@@ -8,7 +8,7 @@
 // Estructura de usuario
 typedef struct{
     char name[MAX_LENGTH];      // Nombre real
-    char lastname[MAX_LENGTH];  // Primer apellido
+    char surname[MAX_LENGTH];  // Primer apellido
     char username[MAX_LENGTH];  // Nombre de usuario
     char password[MAX_LENGTH];  // Contraseña
     int birth_date;             // Fecha de nacimiento
@@ -19,6 +19,6 @@ typedef struct{
 
 int valid_username(char username[MAX_LENGTH]);
 
-void save_usernames(FILE* file, char username);
+void save_user(FILE* file, User* user);
 
-int fill_profile(User* user, FILE* file);
+User* fill_profile(User* user, FILE* file);
