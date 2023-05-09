@@ -5,10 +5,10 @@
 
 // Estructura de actividades
 typedef struct{
-    char type;      // Monumento, gastronomía, hospedaje, deporte, transporte, otros
+    char type;      // Monumento, Gastronomía, Hospedaje, Deporte, Transporte, Otros
     char location;  // Ubicación
     char schedule;  // Horarios
     double price;   // Precio
     int stars;      // Valoración (0-5)
-    char review;    // Reseña, opiniones, comentarios
+    char review;    // Reseña, Opiniones, Comentarios
 } Activity;

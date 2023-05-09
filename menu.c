@@ -6,8 +6,8 @@
 * Pre: -
 * Post: El menú inicial ha sido imprimido por pantalla
 */
-void show_first_menu(){
-    printf("1.\tInicio\n2.\tRegistrarse\n");
+void show_first_menu(){ //El menú que aparece nada más entrar a la red social
+    printf("1.\tInicio\n2.\tRegistrarse\n3.\tListar usuarios\n4.\tSalir\n");
 }
 
 /*
