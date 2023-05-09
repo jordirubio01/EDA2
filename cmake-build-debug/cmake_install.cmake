@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Alex/Desktop/TORRA/UPF/1R CURS/3R TRIM/EDA 2
+# Install script for directory: C:/Users/jordi/Documents/00-UPF/2022-23/3r Trimestre/EDA II/Practiques/Lab 0
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Alex/Desktop/TORRA/UPF/1R CURS/3R TRIM/EDA 2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/jordi/Documents/00-UPF/2022-23/3r Trimestre/EDA II/Practiques/Lab 0/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
