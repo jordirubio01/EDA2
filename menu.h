@@ -10,3 +10,5 @@ void show_full_menu();
 void user_option(int* op);
 
 void load_option(int op, FILE* f);
+
+void load_user_option(int op, FILE* f);

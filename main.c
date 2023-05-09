@@ -5,7 +5,7 @@
 
 int main() {
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\t\t BCN Chat \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    int option;
+    int option; char option_user;
     FILE* f_users = fopen("resources/users.txt", "w");
     show_first_menu();
     user_option(&option);
