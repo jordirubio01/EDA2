@@ -45,9 +45,8 @@ void load_option(int op, FILE* f){ // Opciones iniciales (inicio y registro)
         // FUNCIÓN
     }
     else if (op == 2){  // Registrar usuario
-        User new;
         FILE* f_user = fopen("EDA 2/users.txt", "w");
-        user = fill_profile(&new, f_user);
+        user = fill_profile(f_user);
 
         // Añadiremos el usuario al fichero
         /*if (user != NULL){

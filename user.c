@@ -26,14 +26,14 @@ int valid_username(char username[MAX_LENGTH]){
 * Pre: Recibe un puntero a un usuario
 * Post: Los datos del usuario están completos
 */
-User* fill_profile(User* user, FILE* f_user){
-    char name[MAX_LENGTH], lastname[MAX_LENGTH], username[MAX_LENGTH];
-    char email[MAIL_LENGTH], location[MAX_LENGTH];
+User* fill_profile(FILE* f_user){
+    char name[MAX_LENGTH], surname[MAX_LENGTH], username[MAX_LENGTH];
+    char email[MAIL_LENGTH], location[MAX_LENGTH], password[MAX_LENGTH], interests[MAX_LENGTH*5];
     int birth_date;
     printf("Introduce tu nombre:\n");
     scanf("%s", name);
     printf("Introduce tu apellido:\n");
-    scanf("%s", lastname);
+    scanf("%s", surname);
     printf("Fecha de nacimiento [ddmmaaaa]:\n");
     scanf("%d", &birth_date);
     printf("Email:\n");
@@ -41,16 +41,9 @@ User* fill_profile(User* user, FILE* f_user){
     printf("Ciudad:\n");
     scanf("%s", location);
 
-    // Guardamos los datos recibidos
-    strcpy(user->name, name);
-    strcpy(user->surname, name);
-    strcpy(user->email, email);
-    strcpy(user->location, location);
-    user->birth_date = birth_date;
-
-    printf("Datos introducidos correctamente. Bienvenido/a, %s.\n", user->name);
+    printf("Datos introducidos correctamente. Bienvenido/a, %s.\n", name);
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    printf("%s, ahora debes elegir un nombre de usuario y un password.\n", user->name);
+    printf("%s, ahora debes elegir un nombre de usuario y un password.\n", name);
     printf("Usuario:\n");
     scanf("%s", user->username);
     strcpy(user->username, username);
@@ -61,11 +54,16 @@ User* fill_profile(User* user, FILE* f_user){
     }
     //Tenemos que comprobar que la contraseña sea válida (igual que el nombre de usuario)
     printf("Password:\n");
-    scanf("%s", user->username);
-    return user;
+    scanf("%s", password);
+    UserLinked* new_user = make_user_linked(name, surname, username, password, birth_date, email, location, interests);
+    return new_user->user;
 }
 
-/*
+/**
+ *
+ * @param f
+ * @param user
+ *
  * Pre: Recibe un archivo y un usuario
  * Post: Los datos del usuario se han añadido al archivo
  */
