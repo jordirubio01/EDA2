@@ -53,7 +53,7 @@ void load_option(int op, FILE* f){ // Opciones iniciales (inicio y registro)
             save_user(f, user);
         }*/
     }
-    else if (op == 3){  // Listar usuarios
+    else if (op == 3) {  // Listar usuarios
         // FUNCIÓN
     }
 }
