@@ -45,12 +45,10 @@ User* fill_profile(FILE* f_user){
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
     printf("%s, ahora debes elegir un nombre de usuario y un password.\n", name);
     printf("Usuario:\n");
-    scanf("%s", user->username);
-    strcpy(user->username, username);
-    while (valid_username(user->username) == FALSE){
+    scanf("%s", username);
+    while (valid_username(username) == FALSE){
         printf("El nombre de usuario introducido no está disponible. Introduzca otro:\n");
-        scanf("%s", user->username);
-        strcpy(user->username, username);
+        scanf("%s", username);
     }
     //Tenemos que comprobar que la contraseña sea válida (igual que el nombre de usuario)
     printf("Password:\n");
@@ -71,3 +69,71 @@ void save_user(FILE* f, User* user){
     fprintf(f, "%s %s %s %s\n", user->name, user->surname, user->username, user->password);
 }
 
+
+UserLinked* make_head(User* u){
+    UserLinked* head = NULL;
+    head = (UserLinked*) malloc(sizeof(UserLinked));
+    //GUARDAMOS LOS DATOS//
+    head->user = u;
+    return head;
+}
+
+
+/**
+ *
+ * @param name
+ * @param surname
+ * @param username
+ * @param password
+ * @param birth_date
+ * @param email
+ * @param location
+ * @param interests
+ *
+ * Pre: Recibe los datos correctos de un nuevo usuario (nombre, apellido...)
+ * Post: Devuelve un puntero de tipo UserLinked
+ */
+UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], char username[MAX_LENGTH], char password[MAX_LENGTH],
+                               int birth_date, char email[MAIL_LENGTH], char location[MAX_LENGTH], char interests[MAX_LENGTH*5], UserLinked* first){
+    UserLinked* c = (UserLinked*) malloc(sizeof(UserLinked)); // Allocate memory for a new ClientLinked
+    c->user = (User*) malloc(sizeof(User)); // Allocate memory for its Client variable
+    strcpy(c->user->name, name);
+    strcpy(c->user->surname, surname);
+    strcpy(c->user->username, username);
+    strcpy(c->user->password, password);
+    c->user->birth_date = birth_date;
+    strcpy(c->user->email, email);
+    strcpy(c->user->location, location);
+    strcpy(c->user->interests, interests);
+    c->next = NULL;
+    UserLinked* last = get_last_user(first);
+    last->next = c;
+
+    return c;
+}
+
+
+int get_num_users(UserLinked* u){ // La función devuelve el número de usuarios existentes
+    int user_index = 0;
+    UserLinked* temporary = (UserLinked *) u->user;
+    while (temporary != NULL){
+        user_index++;
+        temporary = temporary->next;
+    }
+    return user_index;
+}
+
+UserLinked* get_last_user(UserLinked* first){
+
+}
+
+UserLinked* search_user(char username[MAX_LENGTH], UserLinked* first){ //La función busca si el usuario recibido existe
+    UserLinked* temp = first;
+    while (temp != NULL){
+        if(strcmp(username, temp->user->username) == 0){
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}

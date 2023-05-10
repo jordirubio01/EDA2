@@ -32,6 +32,10 @@ UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], ch
 
 void save_user(FILE* file, User* user);
 
+UserLinked* make_head(User* u);
+
+UserLinked* get_last_user(UserLinked* first);
+
 int get_num_users(UserLinked* u);
 
 UserLinked* search_user(char username[MAX_LENGTH], UserLinked* u);
