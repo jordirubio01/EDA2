@@ -8,6 +8,14 @@
 #define FILE_NOT_FOUND (-2)
 
 // FUNCIONES INTERNAS
+/**
+ *
+ * @param f_name
+ * @return
+ *
+ * Pre: Recibe una dirección de fichero con usuarios
+ * Post: Lista dinámica con todos los usuarios creada; devuelve un puntero al primer usuario
+ */
 UserLinked* init_list(char f_name[MAX_LENGTH]) {
     UserLinked *first; // Primer usuario
     // Datos de cada usuario
@@ -23,7 +31,7 @@ UserLinked* init_list(char f_name[MAX_LENGTH]) {
         printf("Error al recuperar los usuarios registrados!\n"); //Si fa es NULL, mostramos un mensaje de aviso
     if (f1 == SUCCESS) { //Si el fichero ha sido abierto de forma exitosa...
         // Primer usuario
-        fscanf(f, name, surname, username, password, &birth_date, email, location, &interests);
+        fscanf(f, "%s %s %s %s %d %s %s %d", name, surname, username, password, &birth_date, email, location, &interests);
         first = make_user_linked(name, surname, username, password, birth_date, email, location, interests, NULL);
         // Resto de usuarios
         while (fscanf(f, name, surname, username, password, &birth_date, email, location, &interests) > 7) { //Mientras los datos coincidan...
@@ -40,23 +48,6 @@ UserLinked* init_list(char f_name[MAX_LENGTH]) {
 * Pre: Recibe un puntero a un usuario
 * Post: Los datos del usuario están completos
 */
-int valid_username(char username[MAX_LENGTH]){
-    FILE* f_username = fopen("EDA 2/usernames.txt", "r");
-    char current_username[MAX_LENGTH];
-    int state_password = fscanf(f_username,"%s", current_username);
-    while (state_password > 0){
-        if (strcmp(username, current_username) == 0){
-            return FALSE;
-        }
-        state_password = fscanf(f_username,"%s", current_username);
-    }
-    return TRUE;
-}
-
-/**
-* Pre: Recibe un puntero a un usuario
-* Post: Los datos del usuario están completos
-*/
 User* fill_profile(char f_name[MAX_LENGTH], UserLinked* first){
     char name[MAX_LENGTH], surname[MAX_LENGTH], username[MAX_LENGTH];
     char email[MAIL_LENGTH], location[MAX_LENGTH], password[MAX_LENGTH];
@@ -65,8 +56,8 @@ User* fill_profile(char f_name[MAX_LENGTH], UserLinked* first){
     printf("Para empezar, introduce un nombre de usuario y contrase%ca\n", 164);
     printf("Usuario:\n");
     scanf("%s", username);
-    while (valid_username(username) == FALSE){
-        printf("El nombre de usuario introducido no está disponible. Introduzca otro:\n");
+    while (search_user(username, first) != NULL){ // Mientras el nombre de usuario coincida con alguno existente...
+        printf("El nombre de usuario introducido no est%c disponible. Introduce otro:\n", 160);
         scanf("%s", username);
     }
     //Tenemos que comprobar que la contraseña sea válida (igual que el nombre de usuario)
@@ -104,15 +95,6 @@ User* fill_profile(char f_name[MAX_LENGTH], UserLinked* first){
 void save_user(FILE* f, User* user){
     fprintf(f, "%s %s %s %s\n", user->name, user->surname, user->username, user->password);
 }
-
-
-/*UserLinked* make_head(UserLinked* u){
-    UserLinked* head;
-    head = (UserLinked*) malloc(sizeof(UserLinked));
-    //GUARDAMOS LOS DATOS//
-    head->user = u;
-    return head;
-}*/
 
 
 /**

@@ -1,10 +1,10 @@
-Marc Rodriguez marcrodriguez08 mmmm
-Jordi Rubio jordirubio01 jjjj
-Alex Torra alextorra01 aaaa
-Pepe Torres pepito19 pppp
-Rosa Vila rosita rrrr
-Julia Garcia julieta jjjj
-Lola Flores loli llll
-Marina Gomez marinis mmmm
-Carlos Manzano carlitos cccc
-Kevin Garcia kevinsito kkkk
+Marc Rodriguez marcrodriguez08 mmmm 00000000 marc@gmail.com Badalona 12345
+Jordi Rubio jordirubio01 jjjj 00000000 jordi@gmail.com Badalona 12345
+Alex Torra alextorra01 aaaa 00000000 alex@gmail.com Badalona 12345
+Pepe Torres pepito19 pppp 00000000 pepe@gmail.com Badalona 12345
+Rosa Vila rosita rrrr 00000000 rosa@hotmail.com Badalona 12345
+Julia Garcia julieta jjjj 00000000 julia@gmail.com Badalona 12345
+Lola Flores loli llll 00000000 lola@outlook.com Badalona 12345
+Marina Gomez marinis mmmm 00000000 marina@gmail.com Badalona 12345
+Carlos Manzano carlitos cccc 00000000 carlos@hotmail.com Badalona 12345
+Kevin Garcia kevinsito kkkk 00000000 kevin@gmail.com Badalona 12345

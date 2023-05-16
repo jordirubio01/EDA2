@@ -28,14 +28,10 @@ UserLinked* init_list(char f_name[MAX_LENGTH]);
 
 User* fill_profile(char file[MAX_LENGTH], UserLinked* first);
 
-int valid_username(char username[MAX_LENGTH]);
-
 UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], char username[MAX_LENGTH], char password[MAX_LENGTH],
                              int birth_date, char email[MAIL_LENGTH], char location[MAX_LENGTH], int interests, UserLinked* first);
 
 void save_user(FILE* file, User* user);
-
-UserLinked* make_head(User* u);
 
 UserLinked* get_last_user(UserLinked* first);
 
