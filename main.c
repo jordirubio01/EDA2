@@ -9,7 +9,7 @@ int main() {
 
 
     // Empieza el programa (inicio/registro/listar usuarios)
-    printf("%s\n\t\t\t\t\t\tBCN Chat \n%s\n", BARS, BARS);
+    printf("%s\n\t\t\t\t\t   %c %c Culture Lovers %c %c\n%s\n", BARS, 3, 5, 5, 3, BARS);
     int option; char option_user;
     show_first_menu();
     user_option(&option);

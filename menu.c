@@ -52,7 +52,7 @@ void load_option(int op, char f_name[MAX_LENGTH], UserLinked* l_users){ // Opcio
         }*/
     }
     else if (op == 3) {  // Listar usuarios
-        // FUNCIÓN
+        show_users(l_users);
     }
 }
 

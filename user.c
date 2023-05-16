@@ -24,7 +24,7 @@ UserLinked* init_list(char f_name[MAX_LENGTH]) {
     int birth_date, interests;
 
     // Abrimos el fichero de usuarios
-    int f1 = SUCCESS;
+    int f1 = SUCCESS, exit = 0;
     FILE *f = fopen(f_name, "r"); //Abrimos el fichero input en modo read
     if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
     if (f1 == FILE_NOT_FOUND)
@@ -34,7 +34,7 @@ UserLinked* init_list(char f_name[MAX_LENGTH]) {
         fscanf(f, "%s %s %s %s %d %s %s %d", name, surname, username, password, &birth_date, email, location, &interests);
         first = make_user_linked(name, surname, username, password, birth_date, email, location, interests, NULL);
         // Resto de usuarios
-        while (fscanf(f, name, surname, username, password, &birth_date, email, location, &interests) > 7) { //Mientras los datos coincidan...
+        while (fscanf(f, "%s %s %s %s %d %s %s %d", name, surname, username, password, &birth_date, email, location, &interests) > 7) { //Mientras los datos coincidan...
             make_user_linked(name, surname, username, password, birth_date, email, location, interests, first);
         }
         fclose(f); //Cerramos el fichero fa
@@ -82,6 +82,19 @@ User* fill_profile(char f_name[MAX_LENGTH], UserLinked* first){
 
     UserLinked* new_user = make_user_linked(name, surname, username, password, birth_date, email, location, interests, first);
     return new_user->user;
+}
+
+void show_users(UserLinked* first){
+    int total = get_num_users(first);
+    UserLinked* temp = first;
+    printf("\t\t\t\tLista de usuarios actuales (%d registrados)\n\n%s\n", get_num_users(first), BARS);
+    printf("Nombre\tApellido\tNombre de usuario\tFecha de nacimiento\tEmail\t\t\tLocalidad\n");
+    while (temp != NULL){
+        printf("%s\t%s\t\t%s\t\t\t%d\t\t%s\t\t%s\n", temp->user->name, temp->user->surname, temp->user->username, temp->user->birth_date, temp->user->email, temp->user->location);
+        // FUNCIÓN PARA IMPRIMIR INTERESES (a partir de valores asociados)
+        temp = temp->next;
+    }
+    printf("%s\n", BARS);
 }
 
 /**
@@ -139,9 +152,9 @@ UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], ch
  * Pre: Recibe un puntero al primer usuario registrado
  * Post: Devuelve el número de usuarios
  */
-int get_num_users(UserLinked* u){ // La función devuelve el número de usuarios existentes
+int get_num_users(UserLinked* first){ // La función devuelve el número de usuarios existentes
     int user_index = 0;
-    UserLinked* temporary = (UserLinked *) u->user;
+    UserLinked* temporary = first;
     while (temporary != NULL){
         user_index++;
         temporary = temporary->next;
@@ -149,9 +162,21 @@ int get_num_users(UserLinked* u){ // La función devuelve el número de usuarios
     return user_index;
 }
 
-
+/**
+ *
+ * @param first
+ * @return
+ *
+ * Pre: Recibe un puntero al primer usuario
+ * Post: Devuelve un puntero al último usuario registrado
+ *
+ */
 UserLinked* get_last_user(UserLinked* first){
-
+    UserLinked* temp = first;
+    while (temp->next != NULL){
+        temp = temp->next;
+    }
+    return temp;
 }
 
 
