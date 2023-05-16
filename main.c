@@ -1,16 +1,21 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "menu.h"
-#include "user.h"
 
 int main() {
-    printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\t\t BCN Chat \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    // Recuperamos los usuarios registrados hasta ahora
+    char f_users[MAX_LENGTH] = "resources/users.txt";
+    UserLinked* l_users = init_list(f_users);
+
+
+    // Empieza el programa (inicio/registro/listar usuarios)
+    printf("%s\n\t\t\t\t\t\tBCN Chat \n%s\n", BARS, BARS);
     int option; char option_user;
-    FILE* f_users = fopen("resources/users.txt", "w");
     show_first_menu();
     user_option(&option);
     while (option != 4){
-        load_option(option, f_users);
+        load_option(option, f_users, l_users);
+        show_first_menu();
         user_option(&option);
     }
     return 0;

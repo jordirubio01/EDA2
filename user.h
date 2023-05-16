@@ -2,6 +2,7 @@
 #define LAB_0_USER_H
 #define MAX_LENGTH 20
 #define MAIL_LENGTH 50
+#define BARS "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #endif //LAB_0_USER_H
 
@@ -14,7 +15,7 @@ typedef struct{
     int birth_date;                 // Año de nacimiento
     char email[MAIL_LENGTH];        // Correo electrónico
     char location[MAX_LENGTH];      // Ubicación
-    char interests[MAX_LENGTH*5];   // Intereses (recomendaremos usuarios afines)
+    int interests;                  // Intereses (recomendaremos usuarios afines)
 } User;
 
 // Estructura de lista enlazada de usuario
@@ -23,12 +24,14 @@ typedef struct user_linked_list{
     struct user_linked_list* next;  // Puntero al siguiente usuario
 } UserLinked;
 
-User* fill_profile(FILE* file);
+UserLinked* init_list(char f_name[MAX_LENGTH]);
+
+User* fill_profile(char file[MAX_LENGTH], UserLinked* first);
 
 int valid_username(char username[MAX_LENGTH]);
 
 UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], char username[MAX_LENGTH], char password[MAX_LENGTH],
-                             int birth_date, char email[MAIL_LENGTH], char location[MAX_LENGTH], char interests[MAX_LENGTH*5], UserLinked* head);
+                             int birth_date, char email[MAIL_LENGTH], char location[MAX_LENGTH], int interests, UserLinked* first);
 
 void save_user(FILE* file, User* user);
 

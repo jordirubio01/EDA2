@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include "menu.h"
-#include "user.h"
 
 /**
 * Pre: -
 * Post: El menú inicial ha sido imprimido por pantalla
 */
 void show_first_menu(){ //El menú que aparece nada más entrar a la red social
-    printf("1.\tInicio\n2.\tRegistrarse\n3.\tListar usuarios\n4.\tSalir\n");
+    printf("1.\tIniciar sesi%cn\n2.\tRegistrarse\n3.\tListar usuarios\n4.\tSalir\n%s\n", 162, BARS);
 }
 
 /**
@@ -35,18 +34,17 @@ void user_option(int* op){
  * @param op
  * @param f
  *
- * Pre: Recibe una opción válida y un archivo
+ * Pre: Recibe una opción válida y una dirección de archivo
  * Post: Se ha realizado la opción correcta
  *
  */
-void load_option(int op, FILE* f){ // Opciones iniciales (inicio y registro)
+void load_option(int op, char f_name[MAX_LENGTH], UserLinked* l_users){ // Opciones iniciales (inicio y registro)
     User* user;
     if (op == 1){       // Iniciar sesión
         // FUNCIÓN
     }
     else if (op == 2){  // Registrar usuario
-        FILE* f_user = fopen("EDA 2/users.txt", "w");
-        user = fill_profile(f_user);
+        user = fill_profile(f_name, l_users);
 
         // Añadiremos el usuario al fichero
         /*if (user != NULL){
@@ -61,10 +59,13 @@ void load_option(int op, FILE* f){ // Opciones iniciales (inicio y registro)
 /**
  *
  * @param op
+ * @param f_name
+ *
+ * Pre: Recibe un entero y una dirección de archivo
+ * Post: Se ha ejecutado la opción escogida
  */
-
 // ESTA FUNCIÓN LA IMPLEMENTAREMOS EN load_option UNA VEZ SE HAYA INICIADO SESIÓN
-void load_user_option(int op, FILE*){ // Opciones de usuario (ya ha iniciado sesión)
+void load_user_option(int op, char f_name[MAX_LENGTH], UserLinked* l_users){ // Opciones de usuario (ya ha iniciado sesión)
     if (op == 1){       // Enviar solicitud de amistad
         // FUNCIÓN
     }
