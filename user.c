@@ -152,7 +152,7 @@ UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], ch
     strcpy(c->user->location, location);
     c->user->interests = interests;
     c->next = NULL;
-    if (first != NULL){
+    if (first != NULL){ //Si aún no existe ningún usuario...
         UserLinked *last = get_last_user(first);
         last->next = c;
     }
