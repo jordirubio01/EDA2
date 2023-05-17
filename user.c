@@ -283,23 +283,23 @@ int valid_login(char password[MAX_LENGTH], User* user){
 
 User* login(UserLinked* u){
     char username[MAX_LENGTH], password[MAX_LENGTH];
-    printf("%s\n\t\t\t\t\t Inicio de Sesion\n%s\n" BARS, BARS);
-    printf("Usuario:\n");
+    printf("%s\n\t\t\t\t\t Inicio de Sesion\n%s\n", BARS, BARS);
+    printf("\nUsuario:\n");
     scanf("%s", username);
     UserLinked* temp = search_user(username, u);
     if (temp == NULL){
         printf("El usuario '%s' NO existe\n", username);
     }
     else{
-        printf("Contraseña:\n");
+        printf("Password:\n");
         scanf("%s", password);
         int status_login = valid_login(password, temp->user);
         if (status_login == TRUE){
-            printf("Bienvenido %s", temp->user->name);
+            printf("Bienvenido %s\n%s\n", temp->user->name, BARS);
             return temp->user;
         }
         else{
-            printf("Contraseña incorrecta");
+            printf("\nContraseña incorrecta\n");
             return NULL;
         }
     }

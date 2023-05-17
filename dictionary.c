@@ -4,7 +4,7 @@
 
 //FUNCIONES AUXILIARES
 
-void create_dictionary(int size){
+/*void create_dictionary(int size){
     Dictionary* dictionary;
     dictionary = (Dictionary*) malloc(sizeof (Dictionary));
     dictionary->size = size;
@@ -18,4 +18,4 @@ void create_dictionary(int size){
 void add_element_as_first(Dictionary* dictionary, char key, int value){
     Element *element = (Element*) malloc(sizeof (Element));
 
-}
+}*/
