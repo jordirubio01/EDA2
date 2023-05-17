@@ -26,18 +26,25 @@ typedef struct user_linked_list{
 
 UserLinked* init_list(char f_name[MAX_LENGTH]);
 
-User* fill_profile(char file[MAX_LENGTH], UserLinked* first);
+User* fill_profile(char f_name[MAX_LENGTH], UserLinked* first);
 
 UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], char username[MAX_LENGTH], char password[MAX_LENGTH],
                              int birth_date, char email[MAIL_LENGTH], char location[MAX_LENGTH], int interests, UserLinked* first);
 
 void show_users(UserLinked* first);
 
-void save_user(FILE* file, User* user);
+int save_user(char f_name[MAX_LENGTH], User* user);
+
+User* login(UserLinked* u);
+
+int valid_login(char password[MAX_LENGTH], User* user);
 
 UserLinked* get_last_user(UserLinked* first);
 
 int get_num_users(UserLinked* first);
 
-UserLinked* search_user(char username[MAX_LENGTH], UserLinked* u);
+UserLinked* search_user(char username[MAX_LENGTH], UserLinked* first);
 
+int request_friend(char username[MAX_LENGTH], User* user, UserLinked* first, char f_name[MAX_LENGTH]);
+
+int view_requests(User* user, UserLinked* first, char f_name[MAX_LENGTH]);

@@ -37,7 +37,7 @@ UserLinked* init_list(char f_name[MAX_LENGTH]) {
         while (fscanf(f, "%s %s %s %s %d %s %s %d", name, surname, username, password, &birth_date, email, location, &interests) > 7) { //Mientras los datos coincidan...
             make_user_linked(name, surname, username, password, birth_date, email, location, interests, first);
         }
-        fclose(f); //Cerramos el fichero fa
+        fclose(f); //Cerramos el fichero f
         return first;
     }
     return NULL; // Si ha habido algún error, devuelve NULL
@@ -81,6 +81,7 @@ User* fill_profile(char f_name[MAX_LENGTH], UserLinked* first){
     printf("Datos introducidos correctamente. Bienvenido/a, %s. Puedes iniciar sesi%cn cuando quieras.\n%s\n", name, 162, BARS);
 
     UserLinked* new_user = make_user_linked(name, surname, username, password, birth_date, email, location, interests, first);
+    save_user(f_name, new_user->user);
     return new_user->user;
 }
 
@@ -105,8 +106,21 @@ void show_users(UserLinked* first){
  * Pre: Recibe un archivo y un usuario
  * Post: Los datos del usuario se han añadido al archivo
  */
-void save_user(FILE* f, User* user){
-    fprintf(f, "%s %s %s %s\n", user->name, user->surname, user->username, user->password);
+int save_user(char f_name[MAX_LENGTH], User* user){
+    // Abrimos el fichero de usuarios
+    int f1 = SUCCESS, exit = 0;
+    FILE *f = fopen(f_name, "a"); //Abrimos el fichero de usuarios en modo append (añadiremos una línea)
+    if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
+    if (f1 == FILE_NOT_FOUND)
+        printf("Error al recuperar los usuarios registrados!\n"); //Si fa es NULL, mostramos un mensaje de aviso
+    if (f1 == SUCCESS) { //Si el fichero ha sido abierto de forma exitosa...
+        // Resto de usuarios
+        fprintf(f, "\n%s %s %s %s %d %s %s %d", user->name, user->surname, user->username, user->password,
+                user->birth_date, user->email, user->location, user->interests);
+        fclose(f); //Cerramos el fichero f
+        return SUCCESS;
+    }
+    return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
 }
 
 
@@ -199,3 +213,94 @@ UserLinked* search_user(char username[MAX_LENGTH], UserLinked* first){ //La func
     }
     return NULL;
 }
+
+/**
+ *
+ * @param username
+ * @param user
+ * @param first
+ * @param f_name
+ * @return
+ *
+ * Pre: recibe un nombre de usuario, puntero al usuario actual, puntero al primer usuario y dirección del fichero de usuarios
+ * Post: si se ha encontrado el usuario, la solicitud ha sido guardada en el fichero correspondiente; en caso contrario, devuelve error
+ */
+int request_friend(char username[MAX_LENGTH], User* user, UserLinked* first, char f_name[MAX_LENGTH]){
+    if (search_user(username, first) != NULL){ // Si se ha encontrado un usuario con ese nombre...
+
+        // Abrimos el fichero de solicitudes de amistad
+        int f1 = SUCCESS, exit = 0;
+        FILE *f = fopen(f_name, "a"); // Abrimos el fichero de solicitudes en modo append (añadiremos una línea)
+        if (f == NULL) f1 = FILE_NOT_FOUND; // Si el archivo es NULL, mandamos un error
+        if (f1 == FILE_NOT_FOUND)
+            printf("Error al recuperar los usuarios registrados!\n"); //Si fa es NULL, mostramos un mensaje de aviso
+
+        if (f1 == SUCCESS) { // Si el fichero ha sido abierto de forma exitosa...
+            fprintf(f, "\n%s %s", username, user->name); // Imprimimos en el fichero los dos nombres
+            fclose(f); // Cerramos el fichero f
+            return SUCCESS;
+        }
+        return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
+    }
+}
+
+int view_requests(User* user, UserLinked* first, char f_name[MAX_LENGTH]){
+    char receiver[MAX_LENGTH], sender[MAX_LENGTH];
+    int f_requests = 0;
+
+    // Abrimos el fichero de solicitudes
+    int f1 = SUCCESS, exit = 0;
+    FILE *f = fopen(f_name, "r"); //Abrimos el fichero input en modo read
+    if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
+    if (f1 == FILE_NOT_FOUND)
+        printf("Error al recuperar los usuarios registrados!\n"); //Si fa es NULL, mostramos un mensaje de aviso
+
+    if (f1 == SUCCESS) { //Si el fichero ha sido abierto de forma exitosa...
+        // Primer usuario
+        while (fscanf(f, "%s %s", receiver, sender) == 2) { //Mientras los datos coincidan...
+            if (strcmp(user->username, receiver) == 0){
+                printf("%s quiere ser tu amigo/a.\n", sender);
+                f_requests++;
+            }
+            else if (strcmp(user->username, sender) == 0) printf("Tu solicitud de amistad con %s está pendiente.\n", receiver);
+        }
+        fclose(f); //Cerramos el fichero f
+        if (f_requests == 0) printf("En este momento no has recibido ninguna solicitud de amistad.");
+        return SUCCESS;
+    }
+    return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
+}
+
+int valid_login(char password[MAX_LENGTH], User* user){
+    if (strcmp(password, user->password) == 0){
+        return TRUE;
+    }
+    else{
+        return FALSE;
+    }
+}
+
+User* login(UserLinked* u){
+    char username[MAX_LENGTH], password[MAX_LENGTH];
+    printf("%s\n\t\t\t\t\t Inicio de Sesion\n%s\n" BARS, BARS);
+    printf("Usuario:\n");
+    scanf("%s", username);
+    UserLinked* temp = search_user(username, u);
+    if (temp == NULL){
+        printf("El usuario '%s' NO existe\n", username);
+    }
+    else{
+        printf("Contraseña:\n");
+        scanf("%s", password);
+        int status_login = valid_login(password, temp->user);
+        if (status_login == TRUE){
+            printf("Bienvenido %s", temp->user->name);
+            return temp->user;
+        }
+        else{
+            printf("Contraseña incorrecta");
+            return NULL;
+        }
+    }
+}
+

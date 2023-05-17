@@ -73,6 +73,12 @@ build CMakeFiles/Lab_0.dir/content.c.obj: C_COMPILER__Lab_0_Debug C$:/Users/jord
   OBJECT_DIR = CMakeFiles\Lab_0.dir
   OBJECT_FILE_DIR = CMakeFiles\Lab_0.dir
 
+build CMakeFiles/Lab_0.dir/dictionary.c.obj: C_COMPILER__Lab_0_Debug C$:/Users/jordi/Documents/00-UPF/2022-23/3r$ Trimestre/EDA$ II/Practiques/Lab$ 0/dictionary.c || cmake_object_order_depends_target_Lab_0
+  DEP_FILE = CMakeFiles\Lab_0.dir\dictionary.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu11
+  OBJECT_DIR = CMakeFiles\Lab_0.dir
+  OBJECT_FILE_DIR = CMakeFiles\Lab_0.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Lab_0
@@ -81,7 +87,7 @@ build CMakeFiles/Lab_0.dir/content.c.obj: C_COMPILER__Lab_0_Debug C$:/Users/jord
 #############################################
 # Link the executable Lab_0.exe
 
-build Lab_0.exe: C_EXECUTABLE_LINKER__Lab_0_Debug CMakeFiles/Lab_0.dir/main.c.obj CMakeFiles/Lab_0.dir/menu.c.obj CMakeFiles/Lab_0.dir/user.c.obj CMakeFiles/Lab_0.dir/content.c.obj
+build Lab_0.exe: C_EXECUTABLE_LINKER__Lab_0_Debug CMakeFiles/Lab_0.dir/main.c.obj CMakeFiles/Lab_0.dir/menu.c.obj CMakeFiles/Lab_0.dir/user.c.obj CMakeFiles/Lab_0.dir/content.c.obj CMakeFiles/Lab_0.dir/dictionary.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Lab_0.dir

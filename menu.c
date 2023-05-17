@@ -39,12 +39,12 @@ void user_option(int* op){
  *
  */
 void load_option(int op, char f_name[MAX_LENGTH], UserLinked* l_users){ // Opciones iniciales (inicio y registro)
-    User* user;
+    User* logged_user;
     if (op == 1){       // Iniciar sesión
         // FUNCIÓN
     }
     else if (op == 2){  // Registrar usuario
-        user = fill_profile(f_name, l_users);
+        fill_profile(f_name, l_users);
 
         // Añadiremos el usuario al fichero
         /*if (user != NULL){
