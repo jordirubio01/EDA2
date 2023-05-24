@@ -10,13 +10,14 @@ int main() {
 
     // Empieza el programa (inicio/registro/listar usuarios)
     printf("%s\n\t\t\t\t\t   %c %c Culture Lovers %c %c\n%s\n", BARS, 3, 5, 5, 3, BARS);
-    int option; char option_user;
+    int option;
     show_first_menu();
-    user_option(&option);
+    scanf("%d", &option);
     while (option != 4){
         load_option(option, f_users, l_users);
         show_first_menu();
-        user_option(&option);
+        scanf("%d", &option);
     }
+    printf("%cHasta la pr%cxima!", 173, 162);
     return 0;
 }

@@ -35,7 +35,7 @@ void show_users(UserLinked* first);
 
 int save_user(char f_name[MAX_LENGTH], User* user);
 
-User* login(UserLinked* u);
+User* login(UserLinked* first);
 
 int valid_login(char password[MAX_LENGTH], User* user);
 

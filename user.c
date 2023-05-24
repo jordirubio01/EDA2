@@ -241,16 +241,26 @@ int request_friend(char username[MAX_LENGTH], User* user, UserLinked* first, cha
             fclose(f); // Cerramos el fichero f
             return SUCCESS;
         }
-        return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
     }
+    return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
 }
 
+/**
+ *
+ * @param user
+ * @param first
+ * @param f_name
+ * @return
+ *
+ * Pre: recibe un puntero al usuario actual, un puntero al primer usuario de la lista y una dirección de fichero
+ * Post: si el fichero se ha abierto correctamente, se imprimen por pantalla las solicitudes enviadas/recibidas
+ */
 int view_requests(User* user, UserLinked* first, char f_name[MAX_LENGTH]){
     char receiver[MAX_LENGTH], sender[MAX_LENGTH];
     int f_requests = 0;
 
     // Abrimos el fichero de solicitudes
-    int f1 = SUCCESS, exit = 0;
+    int f1 = SUCCESS;
     FILE *f = fopen(f_name, "r"); //Abrimos el fichero input en modo read
     if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
     if (f1 == FILE_NOT_FOUND)
@@ -272,23 +282,23 @@ int view_requests(User* user, UserLinked* first, char f_name[MAX_LENGTH]){
     return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
 }
 
-int valid_login(char password[MAX_LENGTH], User* user){
-    if (strcmp(password, user->password) == 0){
-        return TRUE;
-    }
-    else{
-        return FALSE;
-    }
-}
-
-User* login(UserLinked* u){
+/**
+ *
+ * @param u
+ * @return
+ *
+ * Pre: recibe un puntero al primer usuario de la lista
+ * Post: si el usuario y la contraseña introducidos en la función son correctos, devuelve un puntero al usuario
+ */
+User* login(UserLinked* first){
     char username[MAX_LENGTH], password[MAX_LENGTH];
     printf("%s\n\t\t\t\t\t Inicio de Sesion\n%s\n", BARS, BARS);
     printf("\nUsuario:\n");
     scanf("%s", username);
-    UserLinked* temp = search_user(username, u);
+    UserLinked* temp = search_user(username, first);
     if (temp == NULL){
         printf("El usuario '%s' NO existe\n", username);
+        return NULL;
     }
     else{
         printf("Password:\n");
@@ -299,9 +309,26 @@ User* login(UserLinked* u){
             return temp->user;
         }
         else{
-            printf("\nContraseña incorrecta\n");
+            printf("\nContrase%ca incorrecta\n", 164);
             return NULL;
         }
     }
 }
 
+/**
+ *
+ * @param password
+ * @param user
+ * @return
+ *
+ * Pre: recibe un string correspondiente a la contraseña y una estructura de usuario
+ * Post: si la contraseña es correcta, devuelve TRUE; en caso contrario, devuelve FALSE
+ */
+int valid_login(char password[MAX_LENGTH], User* user){
+    if (strcmp(password, user->password) == 0){
+        return TRUE;
+    }
+    else{
+        return FALSE;
+    }
+}
