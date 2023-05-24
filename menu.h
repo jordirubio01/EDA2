@@ -8,6 +8,6 @@ void show_first_menu();
 
 void show_full_menu();
 
-void load_option(int op, char f_name[MAX_LENGTH], UserLinked* l_users);
+void load_option(int op, UserLinked* l_users, Request* l_requests);
 
-void load_user_option(int op, char f_name[MAX_LENGTH], UserLinked* l_users, User* current_user);
+void load_user_option(int op, UserLinked* l_users, User* current_user, Request* l_requests);
