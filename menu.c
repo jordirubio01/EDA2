@@ -68,13 +68,8 @@ void load_user_option(int op, UserLinked* l_users, User* current_user, Request* 
         char asked_user[MAX_LENGTH];
         printf("%cA qui%cn quieres agregar? Introduce su nombre de usuario:\n", 168, 130);
         scanf("%s", asked_user);
-        make_request(asked_user, current_user->username, l_requests, l_users);
-        //BORRAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-        Request* temp = l_requests;
-        while (temp != NULL){
-            printf("%s %s", l_requests->receiver, l_requests->sender);
-            temp = temp->next;
-        }
+        if (l_requests == NULL) l_requests = make_request(asked_user, current_user->username, l_requests, l_users);
+        else make_request(asked_user, current_user->username, l_requests, l_users);
     }
     else if (op == 2){  // Gestionar solicitudes de amistad
         // FUNCIÓN

@@ -258,31 +258,25 @@ void show_users(UserLinked* first){
  */
 Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Request* first_req, UserLinked* first_user){
     if (search_user(receiver, first_user) != NULL){ // Si se ha encontrado un usuario con ese nombre...
-        Request *req = (Request *) malloc(sizeof(Request)); // Reservamos memoria para una nueva solicitud
+        Request* req = (Request *) malloc(sizeof(Request)); // Reservamos memoria para una nueva solicitud
         strcpy(req->receiver, receiver);    // Guardamos el nombre del receptor
         strcpy(req->sender, sender);        // Guardamos el nombre del usuario
         req->next = NULL;   // La petición actual es la última por ahora
 
         // Si ya existe alguna solicitud...
         if (first_req != NULL){
-            Request *temp = first_req;
+            Request* temp = first_req;
             while (temp->next != NULL) { // Buscamos la última solicitud (la última no nula)
                 temp = temp->next;
             }
             temp->next = req; // La nueva solicitud será la siguiente de la última
             req->prev = temp;
         }
-        // Si no había ninguna solicitud, esta es la primera
-        else{
-            req->prev = NULL;
-            first_req = req;
-        }
+        // Si no había ninguna solicitud, la anterior a esta es nula
+        else req->prev = NULL;
         return req; // Devuelve la última solicitud
     }
-    else{
-        printf("No hemos encontrado al usuario que buscas...\n");
-        return NULL;
-    }
+    else return NULL;
 }
 
 /**
