@@ -294,14 +294,14 @@ int save_requests(Request* first_req){
     Request* temp = first_req;
     // Actualizamos el fichero con las solicitudes
     int f1 = SUCCESS, exit = 0;
-    FILE *f = fopen(FILE_REQUESTS, "a"); // Abrimos el fichero de solicitudes en modo append (añadiremos una línea)
+    FILE *f = fopen(FILE_REQUESTS, "w"); // Abrimos el fichero de solicitudes en modo write (actualizaremos el fichero)
     if (f == NULL) f1 = FILE_NOT_FOUND; // Si el archivo es NULL, mandamos un error
     if (f1 == FILE_NOT_FOUND)
         printf("%cError al recuperar las solicitudes de amistad!\n", 173); //Si fa es NULL, mostramos un mensaje de aviso
 
     if (f1 == SUCCESS) { // Si el fichero ha sido abierto de forma exitosa...
         while (temp != NULL){
-            fprintf(f, "\n%s %s", first_req->receiver, first_req->sender); // Imprimimos en el fichero los dos nombres
+            fprintf(f, "\n%s %s", temp->receiver, temp->sender); // Imprimimos en el fichero los dos nombres
             temp = first_req->next;
         }
         fclose(f); // Cerramos el fichero f
@@ -320,33 +320,66 @@ int save_requests(Request* first_req){
  * Pre: recibe un puntero al usuario actual, un puntero al primer usuario de la lista y una dirección de fichero
  * Post: si el fichero se ha abierto correctamente, se imprimen por pantalla las solicitudes enviadas/recibidas
  */
-int view_requests(User* user, UserLinked* first){
+void view_requests(User* user, UserLinked* first_user, Request* first_req){
     char receiver[MAX_LENGTH], sender[MAX_LENGTH];
-    int f_requests = 0;
+    Request* temp = (Request*) malloc(sizeof(Request));
+    temp = first_req;
 
-    // Abrimos el fichero de solicitudes
-    int f1 = SUCCESS;
-    FILE *f = fopen(FILE_REQUESTS, "r"); //Abrimos el fichero input en modo read
-    if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
-    if (f1 == FILE_NOT_FOUND)
-        printf("Error al recuperar los usuarios registrados!\n"); //Si fa es NULL, mostramos un mensaje de aviso
-
-    if (f1 == SUCCESS) { //Si el fichero ha sido abierto de forma exitosa...
-        // Primer usuario
-        while (fscanf(f, "%s %s", receiver, sender) == 2) { //Mientras los datos coincidan...
-            if (strcmp(user->username, receiver) == 0){
-                printf("%s quiere ser tu amigo/a.\n", sender);
-                f_requests++;
-            }
-            else if (strcmp(user->username, sender) == 0) printf("Tu solicitud de amistad con %s está pendiente.\n", receiver);
+    // Buscamos peticiones recibidas y enviadas
+    while (temp != NULL){
+        if(strcmp(user->username, temp->receiver) == 0){
+            accept_deny_req(user, temp, 1, first_user);
         }
-        fclose(f); //Cerramos el fichero f
-        if (f_requests == 0) printf("En este momento no has recibido ninguna solicitud de amistad.");
-        return SUCCESS;
+        else if(strcmp(user->username, temp->sender) == 0) {
+            accept_deny_req(user, temp, 2, first_user);
+        }
+        temp = temp->next;
     }
-    return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
+    // Guardamos todos los cambios
+    save_requests(first_req);
 }
 
+void accept_deny_req(User* user, Request* req, int rec_sent, UserLinked* first_u){
+    int yes_no, i = 0, code = 0;
+    UserLinked* s_user = (UserLinked*) malloc(sizeof(UserLinked));
+
+    // Si la petición ha sido recibida...
+    if (rec_sent == 1){
+        printf("%s quiere ser tu amigo/a. %cQuieres aceptar? (Responde 0 para eliminar o 1 para aceptar)\n", req->sender, 168);
+        scanf("%d", &yes_no);
+        if (yes_no == 0){
+            printf("Solicitud eliminada.");
+        }
+        else if (yes_no == 1){
+            while (code == 0) {
+                if (user->friends[i] == NULL){
+                    strcpy(user->friends[i], req->sender);
+                    code = 1;
+                }}code = 0;
+            s_user = search_user(req->sender, first_u);
+            while (code == 0){
+                if (s_user->user->friends[i] == NULL) {
+                    strcpy(s_user->user->friends[i], req->receiver);
+                    code = 1;
+                }}
+            printf("Ahora %s es tu amigo/a.\n", req->sender);
+        }
+        // En cualquier caso, acabamos eliminando las solicitudes
+        if (req->prev != NULL) req->prev->next = req->next;
+        if (req->next != NULL) req->next->prev = req->prev;
+        free(req);
+    }
+    // Si la petición ha sido enviada...
+    else if (rec_sent == 2){
+        printf("Tu solicitud de amistad con %s est%c pendiente. %cQuieres eliminarla? (Responde 1 para eliminar o 0 para cancelar)\n", req->receiver, 160, 168);
+        scanf("%d", &yes_no);
+        if (yes_no == 1){
+            if (req->prev != NULL) req->prev->next = req->next;
+            if (req->next != NULL) req->next->prev = req->prev;
+            free(req);
+        }
+    }
+}
 
 /******** FUNCIONES AUXILIARES (implementadas en varias funciones) ********/
 /**

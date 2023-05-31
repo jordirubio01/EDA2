@@ -9,7 +9,7 @@
 #endif //LAB_0_USER_H
 
 /// Estructura de usuario
-typedef struct{
+typedef struct {
     char name[MAX_LENGTH];          // Nombre real
     char surname[MAX_LENGTH];       // Primer apellido
     char username[MAX_LENGTH];      // Nombre de usuario
@@ -18,6 +18,7 @@ typedef struct{
     char email[MAIL_LENGTH];        // Correo electrónico
     char location[MAX_LENGTH];      // Ubicación
     int interests;                  // Intereses (recomendaremos usuarios afines)
+    char friends[50][MAX_LENGTH];  // Amigos y amigas (máximo 50)
 } User;
 
 /// Estructura de lista enlazada de usuario
@@ -64,7 +65,9 @@ Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Reques
 
 int save_requests(Request* first_req);
 
-int view_requests(User* user, UserLinked* first);
+void view_requests(User* user, UserLinked* first_user, Request* first_req);
+
+void accept_deny_req(User* user, Request* req, int rec_sent, UserLinked* first_u);
 
 
 ///Funciones auxiliares

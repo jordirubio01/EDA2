@@ -48,9 +48,6 @@ void load_option(int op, UserLinked* l_users, Request* l_requests){ // Opciones 
     else if (op == 3){  // Listar usuarios
         show_users(l_users);
     }
-    else if (op == 4){  // Cerrar sesión (actualizamos las solicitudes de amistad al final de la sesión)
-        save_requests(l_requests);
-    }
     else printf("Por favor, introduce un n%cmero del 1 al 4\n", 163);
 }
 
@@ -70,9 +67,10 @@ void load_user_option(int op, UserLinked* l_users, User* current_user, Request* 
         scanf("%s", asked_user);
         if (l_requests == NULL) l_requests = make_request(asked_user, current_user->username, l_requests, l_users);
         else make_request(asked_user, current_user->username, l_requests, l_users);
+        save_requests(l_requests);
     }
     else if (op == 2){  // Gestionar solicitudes de amistad
-        // FUNCIÓN
+        view_requests(current_user, l_users, l_requests);
     }
     else if (op == 3){  // Realizar publicación
         // FUNCIÓN
