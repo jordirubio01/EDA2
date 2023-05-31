@@ -15,5 +15,8 @@ typedef struct{
     int counter;
 } Dictionary;
 
-
+typedef struct{
+    char word[100];
+    int counter;
+}Word_Counter;
 
