@@ -117,13 +117,16 @@ void counter_of_words(int size, FILE* review, Dictionary* dictionary){
     char publication[MAX_LENGTH_REVIEW];
     fgets(publication, sizeof(publication), review);
 
-    separadores[] = " ,.?¿¡!;:";
-    char* word = strtok_r(publication, separadores)
-    while(word != NULL){
-        if(word[strlen(word)-1] == '\n'){
-            token[strlen(token)-1] = '\0';
+    // Separamos las palabras de la publicación
+    char delimiters[] = " ,:;.¿?¡!";
+    char* word = strtok(publication, delimiters);
+    while(word != NULL) {
+        // Eliminamos el salto de línea del final de la palabra
+        if (word[strlen(word) - 1] == '\n') {
+            word[strlen(word) - 1] = '\0';
         }
 
+        // Buscamos si la palabra ya está en el diccionario
         int word_found = FALSE;
         for (int idx = 0; idx < dictionary->size; idx++) {
             if (strcmp(dictionary->elements[idx]->word, word) == 0) {
@@ -144,4 +147,14 @@ void counter_of_words(int size, FILE* review, Dictionary* dictionary){
         // Obtenemos la siguiente palabra de la publicación
         word = strtok(NULL, " ");
     }
-}*/
+
+    // Ordenamos el diccionario de mayor a menor uso utilizando mergesort
+    mergeSort(dictionary, 0, dictionary->size - 1);
+
+    printf("\nLas 10 palabras con mayor uso son;\n");
+    for (int idx = 0; idx < dictionary->size && idx < 10; idx++){
+        printf("%s: %d veces\n", dictionary->elements[idx]->word, dictionary->elements[idx]->counter);
+    }
+}
+
+

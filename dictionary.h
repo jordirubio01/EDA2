@@ -6,7 +6,7 @@
 #endif //LAB_0_DICTIONARY_H
 
 typedef struct{
-    char word[100];
+    char word[MAX_LENGTH];
     int counter;
 }Word_Counter;
 
@@ -16,3 +16,8 @@ typedef struct{
     int counter;
 } Dictionary;
 
+void merge(Dictionary* dictionary, int left, int middle, int right);
+
+void mergeSort(Dictionary* dictionary, int let, int right);
+
+void counter_of_words(int size, FILE* review, Dictionary* dictionary);
