@@ -417,14 +417,16 @@ void accept_deny_req(User* user, Request* req, int rec_sent, UserLinked* first_u
                     strcpy(user->friends[i], req->sender); // Añadimos el nuevo amigo
                     code = 1;   // Salimos del bucle
                 }
+                i++;
             }
-            code = 0; // Restablecemos el código de éxito
+            i = 0, code = 0; // Restablecemos el índice y el código de éxito
             UserLinked* s_user = search_user(req->sender, first_u); // Buscamos el otro usuario
             while (code == 0){  // Entramos en bucle hasta añadir amigo correctamente
                 if (strcmp(s_user->user->friends[i], " ") == 0) { // Si encontramos un elemento vacío...
                     strcpy(s_user->user->friends[i], req->receiver); // Añadimos el nuevo amigo
                     code = 1;   // Salimos del bucle
                 }
+                i++;
             }
             printf("Ahora %s es tu amigo/a.\n", req->sender); // Imprimimos mensaje de éxito
         }
