@@ -14,7 +14,7 @@ void show_first_menu(){ //El menú que aparece nada más entrar a la red social
  * Post: El menú completo ha sido imprimido por pantalla
  */
 void show_full_menu(){
-    printf("%s\n1.\tEnviar solicitud de amistad\n2.\tGestionar solicitudes pendientes\n3.\tPublicar\n4.\tGestionar publicaciones\n5.\tCerrar sesi%cn\n%s\n", BARS, 162, BARS);
+    printf("%s\n1.\tEnviar solicitud de amistad\n2.\tGestionar amigos/as\n3.\tPublicar\n4.\tGestionar publicaciones\n5.\tCerrar sesi%cn\n%s\n", BARS, 162, BARS);
 }
 
 
@@ -65,12 +65,17 @@ void load_user_option(int op, UserLinked* l_users, User* current_user, Request* 
         char asked_user[MAX_LENGTH];
         printf("%cA qui%cn quieres agregar? Introduce su nombre de usuario:\n", 168, 130);
         scanf("%s", asked_user);
+        if (strcmp(asked_user, current_user->username) == 0) printf("%cNo puedes agregarte a ti mismo!\n", 173);
         if (l_requests == NULL) l_requests = make_request(asked_user, current_user->username, l_requests, l_users);
         else make_request(asked_user, current_user->username, l_requests, l_users);
         save_requests(l_requests);
     }
     else if (op == 2){  // Gestionar solicitudes de amistad
-        view_requests(current_user, l_users, l_requests);
+        int friend_op;
+        printf("%s\n1.\tVer lista de amigos/as\n2.\tAceptar o rechazar solicitudes\n%s\n", BARS, BARS);
+        scanf("%d", &friend_op);
+        if (friend_op == 1) view_friends(current_user);
+        else if (friend_op == 2) view_requests(current_user, l_users, l_requests);
     }
     else if (op == 3){  // Realizar publicación
         // FUNCIÓN

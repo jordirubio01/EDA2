@@ -1,3 +1,4 @@
+#include <string.h>
 #ifndef LAB_0_USER_H
 #define LAB_0_USER_H
 #define MAX_LENGTH 25
@@ -5,8 +6,25 @@
 #define BARS "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 #define FILE_USERS "resources/users.txt"
 #define FILE_REQUESTS "resources/requests.txt"
+#define FILE_CONTENT "resources/content.txt"
+
+#define FALSE 0
+#define TRUE 1
+#define SUCCESS 0
+#define FILE_NOT_FOUND (-2)
 
 #endif //LAB_0_USER_H
+
+/// Estructura de actividades
+typedef struct{
+    char name;
+    int type;      // Monumento, Gastronomía, Hospedaje, Deporte, Transporte, Otros
+    char location;  // Ubicación
+    char schedule;  // Horarios
+    double price;   // Precio
+    int stars;      // Valoración (0-5)
+    char review;    // Reseña, Opiniones, Comentarios
+} Activity;
 
 /// Estructura de usuario
 typedef struct {
@@ -18,7 +36,8 @@ typedef struct {
     char email[MAIL_LENGTH];        // Correo electrónico
     char location[MAX_LENGTH];      // Ubicación
     int interests;                  // Intereses (recomendaremos usuarios afines)
-    char friends[50][MAX_LENGTH];  // Amigos y amigas (máximo 50)
+    char friends[25][MAX_LENGTH];   // Amigos y amigas (máximo 50)
+    Activity content;
 } User;
 
 /// Estructura de lista enlazada de usuario
@@ -64,6 +83,8 @@ void show_users(UserLinked* first);
 Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Request* first_req, UserLinked* first_user);
 
 int save_requests(Request* first_req);
+
+void view_friends(User* user);
 
 void view_requests(User* user, UserLinked* first_user, Request* first_req);
 

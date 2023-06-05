@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "user.h"
-#define FALSE (-1)
-#define TRUE 1
-#define SUCCESS 0
-#define FILE_NOT_FOUND (-2)
+
+
 
 
 /******** FUNCIONES INTERNAS INICIO Y FINAL ********/
@@ -58,7 +55,7 @@ Request* init_queue(UserLinked* first_user) {
     char r_name[MAX_LENGTH], s_name[MAX_LENGTH];
 
     // Abrimos el fichero de solicitudes
-    int f1 = SUCCESS, exit = 0;
+    int f1 = SUCCESS;
     FILE *f = fopen(FILE_REQUESTS, "r"); //Abrimos el fichero input en modo read
     if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
     if (f1 == FILE_NOT_FOUND)
@@ -90,8 +87,8 @@ Request* init_queue(UserLinked* first_user) {
  */
 User* login(UserLinked* first){
     char username[MAX_LENGTH], password[MAX_LENGTH];
-    printf("%s\n\t\t\t\t\t Inicio de Sesion\n%s\n", BARS, BARS);
-    printf("\nUsuario:\n");
+    printf("%s\n\t\t\t\t\t Inicio de Sesi%cn\n%s\n", BARS, 162, BARS);
+    printf("Usuario:\n");
     scanf("%s", username);
     UserLinked* temp = search_user(username, first);
     if (temp == NULL){
@@ -198,6 +195,9 @@ UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], ch
     strcpy(c->user->email, email);
     strcpy(c->user->location, location);
     c->user->interests = interests;
+    for (int i = 0; i < 25; i++){
+        strcpy(c->user->friends[i], " ");
+    }
     c->next = NULL;
     if (first != NULL){ //Si aún no existe ningún usuario...
         UserLinked *last = get_last_user(first);
@@ -231,6 +231,13 @@ int save_user(User* user){
     return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
 }
 
+/**
+ *
+ * @param first
+ *
+ * Pre: Recibe un puntero al primer usuario
+ * Post: Los datos de todos los usuarios han sido imprimidos
+ */
 void show_users(UserLinked* first){
     int total = get_num_users(first);
     UserLinked* temp = first;
@@ -258,6 +265,17 @@ void show_users(UserLinked* first){
  */
 Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Request* first_req, UserLinked* first_user){
     if (search_user(receiver, first_user) != NULL){ // Si se ha encontrado un usuario con ese nombre...
+        // Comprobamos que la solicitud no esté repetida
+        Request* temp = first_req;
+        while (temp != NULL){
+            if (strcmp(temp->receiver, receiver) == 0 && strcmp(temp->sender, sender) == 0){
+                printf("Ya tienes una solicitud pendiente con %s.\n", receiver);
+                return NULL;
+            }
+            temp = temp->next;
+        }
+
+
         Request* req = (Request *) malloc(sizeof(Request)); // Reservamos memoria para una nueva solicitud
         strcpy(req->receiver, receiver);    // Guardamos el nombre del receptor
         strcpy(req->sender, sender);        // Guardamos el nombre del usuario
@@ -265,7 +283,7 @@ Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Reques
 
         // Si ya existe alguna solicitud...
         if (first_req != NULL){
-            Request* temp = first_req;
+            temp = first_req;
             while (temp->next != NULL) { // Buscamos la última solicitud (la última no nula)
                 temp = temp->next;
             }
@@ -276,7 +294,17 @@ Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Reques
         else req->prev = NULL;
         return req; // Devuelve la última solicitud
     }
-    else return NULL;
+    else if (strcmp(receiver, "Receiver") == 0 && strcmp(sender, "Sender") == 0){ // Si simplemente es el encabezado...
+        Request* req = (Request *) malloc(sizeof(Request)); // Reservamos memoria
+        strcpy(req->receiver, receiver);    // Guardamos "Receiver"
+        strcpy(req->sender, sender);        // Guardamos "Sender"
+        req->next = NULL;   // El elemento actual es el último por ahora
+        return req;
+    }
+    else{
+        printf("No se ha encontrado ningun usuario llamado %s.\n", receiver);
+        return NULL;
+    }
 }
 
 /**
@@ -293,21 +321,41 @@ Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Reques
 int save_requests(Request* first_req){
     Request* temp = first_req;
     // Actualizamos el fichero con las solicitudes
-    int f1 = SUCCESS, exit = 0;
-    FILE *f = fopen(FILE_REQUESTS, "w"); // Abrimos el fichero de solicitudes en modo write (actualizaremos el fichero)
+    int f1 = SUCCESS;
+    remove(FILE_REQUESTS);
+    FILE *f = fopen(FILE_REQUESTS, "a"); // Abrimos el fichero de solicitudes en modo write (actualizaremos el fichero)
     if (f == NULL) f1 = FILE_NOT_FOUND; // Si el archivo es NULL, mandamos un error
     if (f1 == FILE_NOT_FOUND)
         printf("%cError al recuperar las solicitudes de amistad!\n", 173); //Si fa es NULL, mostramos un mensaje de aviso
 
     if (f1 == SUCCESS) { // Si el fichero ha sido abierto de forma exitosa...
         while (temp != NULL){
-            fprintf(f, "\n%s %s", temp->receiver, temp->sender); // Imprimimos en el fichero los dos nombres
-            temp = first_req->next;
+            fprintf(f, "%s %s\n", temp->receiver, temp->sender); // Imprimimos en el fichero los dos nombres
+            temp = temp->next;
         }
         fclose(f); // Cerramos el fichero f
         return SUCCESS;
     }
     return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
+}
+
+/**
+ *
+ * @param user
+ *
+ * Pre: recibe un puntero al usuario actual
+ * Post: todos los amigos se han imprimido por pantalla; si no tiene amigos agregados recibe un mensaje
+ */
+void view_friends(User* user){
+    int i = 0;
+    if (strcmp(user->friends[i], " ") != 0){
+        printf("Lista de amigos:\n");
+        while (strcmp(user->friends[i], " ") != 0){
+            printf("- %s\n", user->friends[i]);
+            i++;
+        }
+    }
+    else printf("Actualmente no tienes amigos agregados.\n");
 }
 
 /**
@@ -322,61 +370,81 @@ int save_requests(Request* first_req){
  */
 void view_requests(User* user, UserLinked* first_user, Request* first_req){
     char receiver[MAX_LENGTH], sender[MAX_LENGTH];
-    Request* temp = (Request*) malloc(sizeof(Request));
-    temp = first_req;
+    Request* temp = first_req;
+    int any_req = FALSE;
 
     // Buscamos peticiones recibidas y enviadas
     while (temp != NULL){
         if(strcmp(user->username, temp->receiver) == 0){
             accept_deny_req(user, temp, 1, first_user);
+            any_req = TRUE;
         }
         else if(strcmp(user->username, temp->sender) == 0) {
             accept_deny_req(user, temp, 2, first_user);
+            any_req = TRUE;
         }
         temp = temp->next;
     }
+    if (any_req == FALSE) printf("Actualmente no has enviado ni recibido solicitudes de amistad.\n");
     // Guardamos todos los cambios
     save_requests(first_req);
 }
 
+/**
+ *
+ * @param user
+ * @param req
+ * @param rec_sent
+ * @param first_u
+ *
+ * Pre: recibe un puntero al usuario actual, la lista de peticiones, un entero (1 o 2) y un puntero al primer usuario
+ * Post: se han aceptado o rechazado las solicitudes del usuario actual
+ */
 void accept_deny_req(User* user, Request* req, int rec_sent, UserLinked* first_u){
     int yes_no, i = 0, code = 0;
-    UserLinked* s_user = (UserLinked*) malloc(sizeof(UserLinked));
 
     // Si la petición ha sido recibida...
     if (rec_sent == 1){
+        // Preguntamos si quiere aceptar o rechazar
         printf("%s quiere ser tu amigo/a. %cQuieres aceptar? (Responde 0 para eliminar o 1 para aceptar)\n", req->sender, 168);
         scanf("%d", &yes_no);
-        if (yes_no == 0){
-            printf("Solicitud eliminada.");
+        if (yes_no == 0){ // Si quiere rechazarla...
+            printf("Solicitud eliminada.\n"); // Imprimimos la decisión
         }
-        else if (yes_no == 1){
-            while (code == 0) {
-                if (user->friends[i] == NULL){
-                    strcpy(user->friends[i], req->sender);
-                    code = 1;
-                }}code = 0;
-            s_user = search_user(req->sender, first_u);
-            while (code == 0){
-                if (s_user->user->friends[i] == NULL) {
-                    strcpy(s_user->user->friends[i], req->receiver);
-                    code = 1;
-                }}
-            printf("Ahora %s es tu amigo/a.\n", req->sender);
+        else if (yes_no == 1){  // Si quiere aceptarla...
+            while (code == 0) { // Entramos en bucle hasta añadir amigo correctamente
+                if (strcmp(user->friends[i], " ") == 0){ // Si encontramos un elemento vacío...
+                    strcpy(user->friends[i], req->sender); // Añadimos el nuevo amigo
+                    code = 1;   // Salimos del bucle
+                }
+            }
+            code = 0; // Restablecemos el código de éxito
+            UserLinked* s_user = search_user(req->sender, first_u); // Buscamos el otro usuario
+            while (code == 0){  // Entramos en bucle hasta añadir amigo correctamente
+                if (strcmp(s_user->user->friends[i], " ") == 0) { // Si encontramos un elemento vacío...
+                    strcpy(s_user->user->friends[i], req->receiver); // Añadimos el nuevo amigo
+                    code = 1;   // Salimos del bucle
+                }
+            }
+            printf("Ahora %s es tu amigo/a.\n", req->sender); // Imprimimos mensaje de éxito
         }
         // En cualquier caso, acabamos eliminando las solicitudes
         if (req->prev != NULL) req->prev->next = req->next;
         if (req->next != NULL) req->next->prev = req->prev;
-        free(req);
+        req = NULL;
     }
+
     // Si la petición ha sido enviada...
     else if (rec_sent == 2){
+        // Preguntamos si quiere eliminarla antes de ser aceptada
         printf("Tu solicitud de amistad con %s est%c pendiente. %cQuieres eliminarla? (Responde 1 para eliminar o 0 para cancelar)\n", req->receiver, 160, 168);
         scanf("%d", &yes_no);
-        if (yes_no == 1){
+        if (yes_no == 1){ // Si quiere eliminarla...
+            // Eliminamos la solicitud
             if (req->prev != NULL) req->prev->next = req->next;
             if (req->next != NULL) req->next->prev = req->prev;
-            free(req);
+            req = NULL;
+            printf("Solicitud eliminada.\n"); // Imprimimos mensaje de éxito
         }
     }
 }
