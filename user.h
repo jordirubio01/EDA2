@@ -3,6 +3,7 @@
 #define LAB_0_USER_H
 #define MAX_LENGTH 25
 #define MAIL_LENGTH 50
+#define MAX_LENGTH_REVIEW 1000
 #define BARS "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 #define FILE_USERS "resources/users.txt"
 #define FILE_REQUESTS "resources/requests.txt"
@@ -25,6 +26,13 @@ typedef struct{
     int stars;      // Valoración (0-5)
     char review;    // Reseña, Opiniones, Comentarios
 } Activity;
+
+/// Estructura de lista enlazada de actividades
+typedef struct activity_linked_list{
+    Activity* activity;
+    struct activity_linked_list* next;
+}ActivityLinked;
+
 
 /// Estructura de usuario
 typedef struct {
