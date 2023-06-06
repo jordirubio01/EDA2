@@ -1,11 +1,9 @@
-#include <stdio.h>
-#include <stdbool.h>
 #include "menu.h"
 
 int main() {
     // Recuperamos los usuarios registrados hasta ahora
-    char f_users[MAX_LENGTH] = "resources/users.txt";
     UserLinked* l_users = init_list();
+    init_friends(l_users);
     Request* l_requests = init_queue(l_users);
 
     // Empieza el programa (inicio/registro/listar usuarios)

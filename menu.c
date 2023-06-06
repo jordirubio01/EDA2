@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "menu.h"
 
 /**
@@ -40,6 +39,7 @@ void load_option(int op, UserLinked* l_users, Request* l_requests){ // Opciones 
                 show_full_menu();
                 scanf("%d", &logged_option);
             }
+            printf("Has cerrado sesi%cn correctamente, %s.\n", 162, logged_user->name);
         }
     }
     else if (op == 2){  // Registrar usuario
@@ -48,7 +48,7 @@ void load_option(int op, UserLinked* l_users, Request* l_requests){ // Opciones 
     else if (op == 3){  // Listar usuarios
         show_users(l_users);
     }
-    else printf("Por favor, introduce un n%cmero del 1 al 4\n", 163);
+    else printf("Por favor, introduce un n%cmero del 1 al 4.\n", 163);
 }
 
 /**

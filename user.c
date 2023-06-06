@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "user.h"
-
-
-
 
 /******** FUNCIONES INTERNAS INICIO Y FINAL ********/
 /**
@@ -11,11 +6,14 @@
  * @param f_name
  * @return
  *
- * Pre: Recibe una dirección de fichero con usuarios
+ * Pre: -
  * Post: Lista dinámica con todos los usuarios creada; devuelve un puntero al primer usuario
  */
 UserLinked* init_list() {
-    UserLinked *first; // Primer usuario
+    clock_t start, end; // Variables para medir el tiempo que se ejecuta la función
+    float total_time;
+    start = clock();    // Empieza el contador
+    UserLinked *first;  // Primer usuario
     // Datos de cada usuario
     char name[MAX_LENGTH], surname[MAX_LENGTH], username[MAX_LENGTH];
     char email[MAIL_LENGTH], location[MAX_LENGTH], password[MAX_LENGTH];
@@ -36,6 +34,9 @@ UserLinked* init_list() {
             make_user_linked(name, surname, username, password, birth_date, email, location, interests, first);
         }
         fclose(f); //Cerramos el fichero f
+        end = clock(); // Termina el contador
+        total_time = ((float)(end-start)) / CLOCKS_PER_SEC; // Diferencia entre inicio y final
+        printf("Usuarios recuperados en %lf segundos\n", total_time);
         return first;
     }
     return NULL; // Si ha habido algún error, devuelve NULL
@@ -43,10 +44,51 @@ UserLinked* init_list() {
 
 /**
  *
+ * @param first_user
+ * @return
+ *
+ * Pre: recibe un puntero al primer usuario
+ * Post: todos los usuarios contienen sus relaciones de amistad
+ */
+int init_friends(UserLinked* first_user){
+    clock_t start, end; // Variables para medir el tiempo que se ejecuta la función
+    float total_time;
+    start = clock();    // Empieza el contador
+
+    // Variables temporales
+    UserLinked* temp_user;
+    char user1[MAX_LENGTH], user2[MAX_LENGTH];
+
+    // Abrimos el fichero de amigos
+    int f1 = SUCCESS, exit = 0;
+    FILE *f = fopen(FILE_FRIENDS, "r"); // Abrimos el fichero input en modo read
+    if (f == NULL) f1 = FILE_NOT_FOUND; // Si el archivo es NULL, mandamos un error
+    if (f1 == FILE_NOT_FOUND)
+        printf("%cError al recuperar las relaciones de amistad entre usuarios!\n", 173); // Si fa es NULL, mostramos un mensaje de aviso
+    if (f1 == SUCCESS) { // Si el fichero ha sido abierto de forma exitosa...
+        // Escaneamos el fichero de amigos
+        fscanf(f, "%s %s", user1, user2); // Ignoramos la primera línea ("User1 User2")
+        while (fscanf(f, "%s %s", user1, user2) == 2) { // Mientras los datos coincidan...
+            temp_user = search_user(user1, first_user); // Buscamos el usuario 1
+            make_friends(temp_user->user, user2, first_user); // Añadimos la relación al perfil de los dos usuarios
+        }
+        fclose(f); //Cerramos el fichero f
+        end = clock(); // Termina el contador
+        total_time = ((float)(end-start)) / CLOCKS_PER_SEC; // Diferencia entre inicio y final
+        printf("Relaciones de amistad recuperadas en %lf segundos\n", total_time);
+        return SUCCESS;
+    }
+    return -1; // Si ha habido algún error, devuelve NULL
+
+}
+
+
+/**
+ *
  * @param f_name
  * @return
  *
- * Pre: Recibe una dirección de fichero con usuarios
+ * Pre: Recibe un puntero al primer usuario
  * Post: Lista dinámica con todas las peticiones de amistad creada; devuelve un puntero a la primera solicitud
  */
 Request* init_queue(UserLinked* first_user) {
@@ -80,7 +122,6 @@ Request* init_queue(UserLinked* first_user) {
     return NULL; // Si ha habido algún error, devuelve NULL
 }
 
-
 /******** FUNCIONES PRINCIPALES ********/
 /**** OPCIONES MENÚ INICIAL (Inicio de sesión, registro, listar usuarios) ****/
 /**
@@ -106,11 +147,11 @@ User* login(UserLinked* first){
         scanf("%s", password);
         int status_login = valid_login(password, temp->user);
         if (status_login == TRUE){
-            printf("Bienvenido %s\n", temp->user->name);
+            printf("Bienvenido/a, %s.\n", temp->user->name);
             return temp->user;
         }
         else{
-            printf("\nContrase%ca incorrecta\n", 164);
+            printf("\nContrase%ca incorrecta.\n", 164);
             return NULL;
         }
     }
@@ -226,9 +267,9 @@ int save_user(User* user){
     FILE *f = fopen(FILE_USERS, "a"); //Abrimos el fichero de usuarios en modo append (añadiremos una línea)
     if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
     if (f1 == FILE_NOT_FOUND)
-        printf("Error al recuperar los usuarios registrados!\n"); //Si fa es NULL, mostramos un mensaje de aviso
+        printf("%cError al recuperar los usuarios registrados!\n", 173); //Si fa es NULL, mostramos un mensaje de aviso
     if (f1 == SUCCESS) { //Si el fichero ha sido abierto de forma exitosa...
-        // Resto de usuarios
+        // Guardamos en el fichero el nuevo usuario
         fprintf(f, "\n%s %s %s %s %d %s %s %d", user->name, user->surname, user->username, user->password,
                 user->birth_date, user->email, user->location, user->interests);
         fclose(f); //Cerramos el fichero f
@@ -250,13 +291,12 @@ void show_users(UserLinked* first){
     printf("\t\t\t\tLista de usuarios actuales (%d registrados)\n\n%s\n", get_num_users(first), BARS);
     printf("Nombre\tApellido\tNombre de usuario\tFecha de nacimiento\tEmail\t\t\tLocalidad\n");
     while (temp != NULL){
-        printf("%s\t%s\t\t%s\t\t\t%d\t\t%s\t\t%s\n", temp->user->name, temp->user->surname, temp->user->username, temp->user->birth_date, temp->user->email, temp->user->location);
+        printf("%s\t%s\t\t%s\t\t       %d\t\t%s\t\t%s\n", temp->user->name, temp->user->surname, temp->user->username, temp->user->birth_date, temp->user->email, temp->user->location);
         // FUNCIÓN PARA IMPRIMIR INTERESES (a partir de valores asociados)
         temp = temp->next;
     }
     printf("%s\n", BARS);
 }
-
 
 /**** OPCIONES DE USUARIO (Enviar solicitudes, gestionar solicitudes) - (opciones de publicaciones en "publications.c/h") ****/
 /**
@@ -270,17 +310,26 @@ void show_users(UserLinked* first){
  * Post: Devuelve un puntero de tipo Request
  */
 Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Request* first_req, UserLinked* first_user){
-    if (search_user(receiver, first_user) != NULL){ // Si se ha encontrado un usuario con ese nombre...
+    UserLinked* rec_user = search_user(receiver, first_user);
+    if (rec_user != NULL){ // Si se ha encontrado un usuario con ese nombre...
         // Comprobamos que la solicitud no esté repetida
         Request* temp = first_req;
-        while (temp != NULL){
-            if (strcmp(temp->receiver, receiver) == 0 && strcmp(temp->sender, sender) == 0){
-                printf("Ya tienes una solicitud pendiente con %s.\n", receiver);
-                return NULL;
+        // ¿Ya se ha enviado o recibido una solicitud de esa persona?
+        while (temp != NULL){ // Por cada solicitud...
+            if ((strcmp(temp->receiver, receiver) == 0 && strcmp(temp->sender, sender) == 0 ) || (strcmp(temp->receiver, sender) == 0 && strcmp(temp->sender, receiver) == 0 )){
+                printf("Tienes una solicitud pendiente con %s (accede a '2. Gestionar amigos/as' para m%cs informaci%cn).\n", receiver, 160, 162); // Imprimimos por pantalla
+                return NULL; // Devolvemos NULL
             }
             temp = temp->next;
         }
 
+        // ¿Ya es amigo/a de esa persona?
+        for (int i = 0; i<25; i++){ // Por cada elemento en la lista de amigos...
+            if (strcmp(rec_user->user->friends[i], sender) == 0){  // Si ya son amigos...
+                printf("%c%s ya es tu amigo/a!\n", 173, receiver); // Imprimimos por pantalla
+                return NULL; // Devolvemos NULL
+            }
+        }
 
         Request* req = (Request *) malloc(sizeof(Request)); // Reservamos memoria para una nueva solicitud
         strcpy(req->receiver, receiver);    // Guardamos el nombre del receptor
@@ -298,6 +347,7 @@ Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Reques
         }
         // Si no había ninguna solicitud, la anterior a esta es nula
         else req->prev = NULL;
+        printf("Solicitud enviada.\n");
         return req; // Devuelve la última solicitud
     }
     else if (strcmp(receiver, "Receiver") == 0 && strcmp(sender, "Sender") == 0){ // Si simplemente es el encabezado...
@@ -355,7 +405,7 @@ int save_requests(Request* first_req){
 void view_friends(User* user){
     int i = 0;
     if (strcmp(user->friends[i], " ") != 0){
-        printf("Lista de amigos:\n");
+        printf("%s\n\t\t\t\t\t\tLista de amigos\n%s\n", BARS, BARS);
         while (strcmp(user->friends[i], " ") != 0){
             printf("- %s\n", user->friends[i]);
             i++;
@@ -367,11 +417,57 @@ void view_friends(User* user){
 /**
  *
  * @param user
+ * @param user2
+ * @param first_u
+ *
+ * Pre: recibe un puntero al usuario1, el nombre del usuario2 y un puntero al primer usuario de todos
+ * Post: la relación de ambos usuarios ha sido actualizada
+ */
+void make_friends(User* user, char user2[MAX_LENGTH], UserLinked* first_u){
+    int i = 0, code = 0;
+    while (code == 0) { // Entramos en bucle hasta añadir amigo correctamente
+        if (strcmp(user->friends[i], " ") == 0){ // Si encontramos un elemento vacío...
+            strcpy(user->friends[i], user2); // Añadimos el nuevo amigo
+            code = 1;   // Salimos del bucle
+        }
+        i++;
+    }
+    i = 0, code = 0; // Restablecemos el índice y el código de éxito
+    UserLinked* s_user = search_user(user2, first_u); // Buscamos el otro usuario
+    while (code == 0){  // Entramos en bucle hasta añadir amigo correctamente
+        if (strcmp(s_user->user->friends[i], " ") == 0) { // Si encontramos un elemento vacío...
+            strcpy(s_user->user->friends[i], user->username); // Añadimos el nuevo amigo
+            code = 1;   // Salimos del bucle
+        }
+        i++;
+    }
+}
+
+
+int save_friends(char user1[MAX_LENGTH], char user2[MAX_LENGTH]){
+    // Abrimos el fichero de amigos
+    int f1 = SUCCESS, exit = 0;
+    FILE *f = fopen(FILE_FRIENDS, "a"); //Abrimos el fichero de usuarios en modo append (añadiremos una línea)
+    if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
+    if (f1 == FILE_NOT_FOUND)
+        printf("%cError al recuperar las relaciones de amistad entre usuarios!\n", 173); //Si fa es NULL, mostramos un mensaje de aviso
+    if (f1 == SUCCESS) { //Si el fichero ha sido abierto de forma exitosa...
+        // Guardamos en el archivo la nueva relación de amistad
+        fprintf(f, "\n%s %s", user1, user2);
+        fclose(f); //Cerramos el fichero f
+        return SUCCESS;
+    }
+    return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
+}
+
+/**
+ *
+ * @param user
  * @param first
  * @param f_name
  * @return
  *
- * Pre: recibe un puntero al usuario actual, un puntero al primer usuario de la lista y una dirección de fichero
+ * Pre: recibe un puntero al usuario actual, un puntero al primer usuario de la lista y un puntero a la lista de peticiones
  * Post: si el fichero se ha abierto correctamente, se imprimen por pantalla las solicitudes enviadas/recibidas
  */
 void view_requests(User* user, UserLinked* first_user, Request* first_req){
@@ -418,22 +514,8 @@ void accept_deny_req(User* user, Request* req, int rec_sent, UserLinked* first_u
             printf("Solicitud eliminada.\n"); // Imprimimos la decisión
         }
         else if (yes_no == 1){  // Si quiere aceptarla...
-            while (code == 0) { // Entramos en bucle hasta añadir amigo correctamente
-                if (strcmp(user->friends[i], " ") == 0){ // Si encontramos un elemento vacío...
-                    strcpy(user->friends[i], req->sender); // Añadimos el nuevo amigo
-                    code = 1;   // Salimos del bucle
-                }
-                i++;
-            }
-            i = 0, code = 0; // Restablecemos el índice y el código de éxito
-            UserLinked* s_user = search_user(req->sender, first_u); // Buscamos el otro usuario
-            while (code == 0){  // Entramos en bucle hasta añadir amigo correctamente
-                if (strcmp(s_user->user->friends[i], " ") == 0) { // Si encontramos un elemento vacío...
-                    strcpy(s_user->user->friends[i], req->receiver); // Añadimos el nuevo amigo
-                    code = 1;   // Salimos del bucle
-                }
-                i++;
-            }
+            make_friends(user, req->sender, first_u);  // Añadimos la relación de amistad en ambos perfiles
+            save_friends(user->username, req->sender); // Guardamos la relación de amistad en el fichero
             printf("Ahora %s es tu amigo/a.\n", req->sender); // Imprimimos mensaje de éxito
         }
         // En cualquier caso, acabamos eliminando las solicitudes

@@ -1,4 +1,7 @@
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #ifndef LAB_0_USER_H
 #define LAB_0_USER_H
 #define MAX_LENGTH 25
@@ -8,6 +11,7 @@
 #define FILE_USERS "resources/users.txt"
 #define FILE_REQUESTS "resources/requests.txt"
 #define FILE_CONTENT "resources/content.txt"
+#define FILE_FRIENDS "resources/friends.txt"
 
 #define FALSE 0
 #define TRUE 1
@@ -18,13 +22,14 @@
 
 /// Estructura de actividades
 typedef struct{
-    char name;
-    int type;      // Monumento, Gastronomía, Hospedaje, Deporte, Transporte, Otros
-    char location;  // Ubicación
-    char schedule;  // Horarios
-    double price;   // Precio
-    int stars;      // Valoración (0-5)
-    char review;    // Reseña, Opiniones, Comentarios
+    char name[MAX_LENGTH];
+    int type;                       // Monumento, Gastronomía, Hospedaje, Deporte, Transporte, Otros
+    char location[MAX_LENGTH];      // Ubicación
+    char schedule[MAX_LENGTH];      // Horarios
+    double price;                   // Precio
+    int stars;                      // Valoración (0-5)
+    char review[MAX_LENGTH_REVIEW]; // Reseña, Opiniones, Comentarios
+    char username[MAX_LENGTH];
 } Activity;
 
 /// Estructura de lista enlazada de actividades
@@ -45,7 +50,7 @@ typedef struct {
     char location[MAX_LENGTH];      // Ubicación
     int interests;                  // Intereses (recomendaremos usuarios afines)
     char friends[25][MAX_LENGTH];   // Amigos y amigas (máximo 50)
-    Activity content;
+    Activity* content;
 } User;
 
 /// Estructura de lista enlazada de usuario
@@ -66,6 +71,8 @@ typedef struct user_request{
 ///Funciones internas inicio
 
 UserLinked* init_list();
+
+int init_friends(UserLinked* first_user);
 
 Request* init_queue(UserLinked* first_user);
 
@@ -93,6 +100,10 @@ Request* make_request(char receiver[MAX_LENGTH], char sender[MAX_LENGTH], Reques
 int save_requests(Request* first_req);
 
 void view_friends(User* user);
+
+void make_friends(User* user, char user2[MAX_LENGTH], UserLinked* first_u);
+
+int save_friends(char user1[MAX_LENGTH], char user2[MAX_LENGTH]);
 
 void view_requests(User* user, UserLinked* first_user, Request* first_req);
 
