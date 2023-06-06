@@ -50,6 +50,9 @@ UserLinked* init_list() {
  * Post: Lista dinámica con todas las peticiones de amistad creada; devuelve un puntero a la primera solicitud
  */
 Request* init_queue(UserLinked* first_user) {
+    clock_t start, end;
+    float total_time;
+    start = clock();
     Request* first_req; // Primera solicitud
     // Datos de cada usuario
     char r_name[MAX_LENGTH], s_name[MAX_LENGTH];
@@ -69,6 +72,9 @@ Request* init_queue(UserLinked* first_user) {
             make_request(r_name, s_name, first_req, first_user);
         }
         fclose(f); //Cerramos el fichero f
+        end = clock(); // Termina el contador
+        total_time = ((float)(end-start)) / CLOCKS_PER_SEC; // Diferencia entre inicio y final
+        printf("Solicitudes de amistad recuperadas en %lf segundos\n", total_time);
         return first_req;
     }
     return NULL; // Si ha habido algún error, devuelve NULL

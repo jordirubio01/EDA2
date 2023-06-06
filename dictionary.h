@@ -20,4 +20,4 @@ void merge(Dictionary* dictionary, int left, int middle, int right);
 
 void mergeSort(Dictionary* dictionary, int let, int right);
 
-void counter_of_words(int size, FILE* review, Dictionary* dictionary);
+void counter_of_words(FILE* review, Dictionary* dictionary);

@@ -111,7 +111,7 @@ void mergeSort(Dictionary* dictionary, int left, int right){
  * Pre:
  * Post:
  */
-void counter_of_words(int size, FILE* review, Dictionary* dictionary){
+void counter_of_words(FILE* review, Dictionary* dictionary){
 
     // Leemos la publicación del usuario
     char publication[MAX_LENGTH_REVIEW];
