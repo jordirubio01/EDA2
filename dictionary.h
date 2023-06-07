@@ -1,3 +1,4 @@
+#include "content.h"
 #ifndef LAB_0_DICTIONARY_H
 #define LAB_0_DICTIONARY_H
 #define MAX_LENGTH 25

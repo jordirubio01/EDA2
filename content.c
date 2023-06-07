@@ -61,7 +61,7 @@ Activity* new_content(ActivityLinked* first, User* user, UserLinked* u){
     scanf("%s", name);
     printf("Localidad:\n");
     scanf("%s", location);
-    printf("Horario [hh:mm - hh:mm]:\n");
+    printf("Horario [hh:mm-hh:mm]:\n");
     scanf("%s", schedule);
     printf("Precio:\n");
     scanf("%f", &price);

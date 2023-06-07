@@ -26,7 +26,7 @@ void show_full_menu(){
  * Post: Se ha realizado la opción correcta
  *
  */
-void load_option(int op, UserLinked* l_users, Request* l_requests, ActivityLinked* activities, Stack* stack){ // Opciones iniciales (inicio y registro)
+void load_option(int op, UserLinked* l_users, Request* l_requests, ActivityLinked* activities, Dictionary* dictionary, Stack* stack){ // Opciones iniciales (inicio y registro)
     User* logged_user;
     clock_t start, end;
     double total_time, total_sec;
@@ -64,8 +64,8 @@ void load_option(int op, UserLinked* l_users, Request* l_requests, ActivityLinke
         show_users(l_users);
     }
     else if (op == 4){ // Dictionary
-        counter_of_words(dict);
-        //imprimir 10 palabras
+        load_dictionary(dictionary, activities);
+        most_used_words(dictionary);
     }
     else printf("Por favor, introduce un n%cmero del 1 al 4.\n", 163);
 }
@@ -157,6 +157,7 @@ Stack* pop(Stack* stack){
 int top(Stack* stack){
     if (isEmpty(stack)){
         printf("El stack est%c vac%co, no se puede devolver ning%cn elemento", 160, 161, 163);
+        return -1;
     }
     else{
         return stack->data[stack->top];
