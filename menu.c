@@ -28,7 +28,6 @@ void show_full_menu(){
  */
 void load_option(int op, UserLinked* l_users, Request* l_requests, ActivityLinked* activities, Stack* stack){ // Opciones iniciales (inicio y registro)
     User* logged_user;
-    Dictionary* dict = init_dictionary(SIZE_DICT);
     clock_t start, end;
     double total_time, total_sec;
     int total_min;

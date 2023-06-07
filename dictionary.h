@@ -8,23 +8,32 @@
 /// Estructura de palabra
 typedef struct{
     char word[MAX_LENGTH];
-    int counter;
+    int repetitions;
 }Word_Counter;
 
 /// Estructura de diccionario
 typedef struct{
     int size;
-    Word_Counter* elements[SIZE_DICT];
+    Word_Counter* elements;
     int counter;
 } Dictionary;
 
 /// Funciones diccionario
-Dictionary* init_dictionary(int size);
+Dictionary* init_dictionary();
 
-void counter_of_words(Dictionary* dictionary);
+void realloc_dictionary(Dictionary* dictionary);
+
+int search_by_value(Dictionary* dictionary, char word[MAX_LENGTH]);
+
+void add_value(Dictionary* dictionary, char word[MAX_LENGTH]);
+
+void modify_value(Dictionary* dictionary, char word[MAX_LENGTH]);
+
+void manage_words_from_dictionary(Dictionary* dictionary, char text[MAX_LENGTH]);
+
+void load_dictionary(Dictionary* dictionary, ActivityLinked* activity);
+
+void most_used_words(Dictionary* dictionary);
 
 /// Funciones de ordenación
-
-void merge(Dictionary* dictionary, int left, int middle, int right);
-
-void mergeSort(Dictionary* dictionary, int left, int right);
+void insertionSort(Dictionary* dictionary);
