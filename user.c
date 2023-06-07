@@ -36,7 +36,7 @@ UserLinked* init_list() {
         fclose(f); //Cerramos el fichero f
         end = clock(); // Termina el contador
         total_time = ((float)(end-start)) / CLOCKS_PER_SEC; // Diferencia entre inicio y final
-        printf("Usuarios recuperados en %lf segundos\n", total_time);
+        printf("Usuarios recuperados en %f segundos\n", total_time);
         return first;
     }
     return NULL; // Si ha habido algún error, devuelve NULL
@@ -75,7 +75,7 @@ int init_friends(UserLinked* first_user){
         fclose(f); //Cerramos el fichero f
         end = clock(); // Termina el contador
         total_time = ((float)(end-start)) / CLOCKS_PER_SEC; // Diferencia entre inicio y final
-        printf("Relaciones de amistad recuperadas en %lf segundos\n", total_time);
+        printf("Relaciones de amistad recuperadas en %f segundos\n", total_time);
         return SUCCESS;
     }
     return -1; // Si ha habido algún error, devuelve NULL
@@ -232,8 +232,8 @@ User* fill_profile(UserLinked* first){
  */
 UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], char username[MAX_LENGTH], char password[MAX_LENGTH],
                              int birth_date, char email[MAIL_LENGTH], char location[MAX_LENGTH], int interests, UserLinked* first){
-    UserLinked* c = (UserLinked*) malloc(sizeof(UserLinked)); // Allocate memory for a new ClientLinked
-    c->user = (User*) malloc(sizeof(User)); // Allocate memory for its Client variable
+    UserLinked* c = (UserLinked*) malloc(sizeof(UserLinked)); // Reservamos memoria para UserLinked
+    c->user = (User*) malloc(sizeof(User)); // Reservamos memoria para User
     strcpy(c->user->name, name);
     strcpy(c->user->surname, surname);
     strcpy(c->user->username, username);

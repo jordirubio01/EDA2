@@ -26,20 +26,35 @@ void show_full_menu(){
  * Post: Se ha realizado la opción correcta
  *
  */
-void load_option(int op, UserLinked* l_users, Request* l_requests){ // Opciones iniciales (inicio y registro)
+void load_option(int op, UserLinked* l_users, Request* l_requests, Stack* stack){ // Opciones iniciales (inicio y registro)
     User* logged_user;
+    clock_t start, end;
+    double total_time, total_sec;
+    int total_min;
+
     if (op == 1){       // Iniciar sesión
         int logged_option;
         logged_user = login(l_users);
         if (logged_user != NULL){
+            // Guardamos el tiempo de ejecución actual en el stack
+            start = clock();
+            push(stack, start);
+            // Mostramos el menú de opciones de usuario
             show_full_menu();
             scanf("%d", &logged_option);
-            while (logged_option != 5){
+            while (logged_option != 6){
                 load_user_option(logged_option, l_users, logged_user, l_requests);
                 show_full_menu();
                 scanf("%d", &logged_option);
             }
-            printf("Has cerrado sesi%cn correctamente, %s.\n", 162, logged_user->name);
+            // Recuperamos el tiempo inicial del stack y calculamos el total
+            end = clock();
+            start = top(stack);
+            pop(stack);
+            total_time = ((double)(end-start) / CLOCKS_PER_SEC);
+            total_min = (int)(total_time) / 60;
+            total_sec = total_time - (double) total_min * 60;
+            printf("Has cerrado sesi%cn correctamente, %s.\nEstuviste conectado/a durante %d min %.2lf segundos.\n", 162, logged_user->name, total_min, total_sec);
         }
     }
     else if (op == 2){  // Registrar usuario
@@ -91,5 +106,50 @@ void load_user_option(int op, UserLinked* l_users, User* current_user, Request* 
         scanf("%s", username);
         UserLinked* x_user = search_user(username, l_users);
         print_all_publications(x_user->user->content);
+    }
+}
+
+/******** FUNCIONES STACK ********/
+Stack* init_stack(){
+    Stack* stack = (Stack*) malloc(sizeof(Stack));
+    stack->top = 0;
+    return stack;
+}
+
+int isEmpty(Stack* stack){
+    return (stack->top == 0);
+}
+
+int isFull(Stack* stack){
+    return (stack->top == MAX_SIZE);
+}
+
+Stack* push(Stack* stack, int element){
+    if (isFull(stack)){
+        printf("El stack est%c lleno, no se puede insertar ning%cn elemento\n", 160, 163);
+    }
+    else{
+        stack->top++;
+        stack->data[stack->top] = element;
+    }
+    return stack;
+}
+
+Stack* pop(Stack* stack){
+    if (isEmpty(stack)){
+        printf("El stack est%c vac%co, no se puede eliminar ning%cn elemento", 160, 161, 163);
+    }
+    else{
+        stack->top--;
+    }
+    return stack;
+}
+
+int top(Stack* stack){
+    if (isEmpty(stack)){
+        printf("El stack est%c vac%co, no se puede devolver ning%cn elemento", 160, 161, 163);
+    }
+    else{
+        return stack->data[stack->top];
     }
 }

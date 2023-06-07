@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #ifndef LAB_0_USER_H
 #define LAB_0_USER_H
 #define MAX_LENGTH 25
@@ -26,7 +27,7 @@ typedef struct{
     int type;                       // Monumento, Gastronomía, Hospedaje, Deporte, Transporte, Otros
     char location[MAX_LENGTH];      // Ubicación
     char schedule[MAX_LENGTH];      // Horarios
-    double price;                   // Precio
+    float price;                    // Precio
     int stars;                      // Valoración (0-5)
     char review[MAX_LENGTH_REVIEW]; // Reseña, Opiniones, Comentarios
     char username[MAX_LENGTH];

@@ -8,7 +8,7 @@ ActivityLinked* make_activity_linked(char name[MAX_LENGTH], int type, char locat
 
 ActivityLinked* get_last_activity(ActivityLinked* first);
 
-ActivityLinked* new_content(ActivityLinked* first, User* user);
+Activity* new_content(ActivityLinked* first, User* user);
 
 ActivityLinked* init_activity_list();
 
