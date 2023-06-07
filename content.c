@@ -2,43 +2,46 @@
 #include "content.h"
 
 
-
-
-ActivityLinked* make_activity_linked(char name[MAX_LENGTH], int type, char location[MAX_LENGTH], char schedule[MAX_LENGTH],
-                                     char review[MAX_LENGTH_REVIEW], int stars, float price, char username[MAX_LENGTH], ActivityLinked* first){
-    ActivityLinked* c = (ActivityLinked*) malloc(sizeof(ActivityLinked)); // Reservamos memoria para ActivityLinked
-    c->activity = (Activity*) malloc(sizeof(Activity)); // Reservamos memoria para Activity
-    strcpy(c->activity->name, name);
-    strcpy(c->activity->location, location);
-    strcpy(c->activity->schedule, schedule);
-    strcpy(c->activity->review, review);
-    strcpy(c->activity->username, username);
-    c->activity->stars = stars;
-    c->activity->type = type;
-    c->activity->price = price;
-    c->next = NULL;
-    if (first != NULL){
-        ActivityLinked* last = get_last_activity(first);
-        last->next = c;
-    }
-}
-
+/******** FUNCIONES INTERNAS ********/
 /**
  *
- * @param first
  * @return
  *
- * Pre: recibe un puntero a la primera actividad
- * Post: devuelve un puntero a la última actividad del usuario
+ * Pre: -
+ * Post: Lista dinámica con todas las actividades creada; devuelve un puntero a la primera actividad del usuario
  */
-ActivityLinked* get_last_activity(ActivityLinked* first){
-    ActivityLinked* temp = first;
-    while (temp->next != NULL){
-        temp = temp->next;
+ActivityLinked* init_activity_list() {
+    ActivityLinked *first_a; // Primer usuario
+    // Datos de cada usuario
+    char name[MAX_LENGTH], location[MAX_LENGTH], schedule[MAX_LENGTH], review[MAX_LENGTH_REVIEW], username[MAX_LENGTH];
+    int stars, type;
+    float price;
+
+    // Abrimos el fichero de usuarios
+    int f1 = SUCCESS, exit = 0;
+    FILE *f = fopen(FILE_CONTENT, "r"); //Abrimos el fichero input en modo read
+    if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
+    if (f1 == FILE_NOT_FOUND)
+        printf("%cError al recuperar las publicacions!\n", 173); //Si fa es NULL, mostramos un mensaje de aviso
+    if (f1 == SUCCESS) { //Si el fichero ha sido abierto de forma exitosa...
+        // Primer usuario
+        fscanf(f, "%s %d %s %s %d %f %s", name, &type, location, schedule, &stars, &price, username);
+        fgetc(f); // Ignoramos el carácter '\n'
+        fgets(review, MAX_LENGTH_REVIEW, f);
+        first_a = make_activity_linked(name, type, location, schedule, review, stars, price, username, NULL);
+        // Resto de usuarios
+        while (fscanf(f, "%s %d %s %s %d %f %s", name, &type, location, schedule, &stars, &price, username) > 6) { //Mientras los datos coincidan.
+            fgetc(f); // Ignoramos el carácter '\n'
+            fgets(review, MAX_LENGTH_REVIEW, f);
+            make_activity_linked(name, type, location, schedule, review, stars, price, username, first_a);
+        }
+        fclose(f); //Cerramos el fichero f
+        return first_a;
     }
-    return temp;
+    return NULL; // Si ha habido algún error, devuelve NULL
 }
 
+/******** FUNCIONES PRINCIPALES ********/
 /**
  *
  * @param first
@@ -78,40 +81,37 @@ Activity* new_content(ActivityLinked* first, User* user){
 
 /**
  *
+ * @param name
+ * @param type
+ * @param location
+ * @param schedule
+ * @param review
+ * @param stars
+ * @param price
+ * @param username
+ * @param first
  * @return
  *
- * Pre: -
- * Post: Lista dinámica con todas las actividades creada; devuelve un puntero a la primera actividad del usuario
+ * Pre:
+ * Post:
  */
-ActivityLinked* init_activity_list() {
-    ActivityLinked *first_a; // Primer usuario
-    // Datos de cada usuario
-    char name[MAX_LENGTH], location[MAX_LENGTH], schedule[MAX_LENGTH], review[MAX_LENGTH_REVIEW], username[MAX_LENGTH];
-    int stars, type;
-    float price;
-
-    // Abrimos el fichero de usuarios
-    int f1 = SUCCESS, exit = 0;
-    FILE *f = fopen(FILE_CONTENT, "r"); //Abrimos el fichero input en modo read
-    if (f == NULL) f1 = FILE_NOT_FOUND; //Si el archivo es NULL, mandamos un error
-    if (f1 == FILE_NOT_FOUND)
-        printf("%cError al recuperar las publicacions!\n", 173); //Si fa es NULL, mostramos un mensaje de aviso
-    if (f1 == SUCCESS) { //Si el fichero ha sido abierto de forma exitosa...
-        // Primer usuario
-        fscanf(f, "%s %d %s %s %d %f %s", name, &type, location, schedule, &stars, &price, username);
-        fgetc(f); // Ignoramos el carácter '\n'
-        fgets(review, MAX_LENGTH_REVIEW, f);
-        first_a = make_activity_linked(name, type, location, schedule, review, stars, price, username, NULL);
-        // Resto de usuarios
-        while (fscanf(f, "%s %d %s %s %d %f %s", name, &type, location, schedule, &stars, &price, username) > 6) { //Mientras los datos coincidan.
-            fgetc(f); // Ignoramos el carácter '\n'
-            fgets(review, MAX_LENGTH_REVIEW, f);
-            make_activity_linked(name, type, location, schedule, review, stars, price, username, first_a);
-        }
-        fclose(f); //Cerramos el fichero f
-        return first_a;
+ActivityLinked* make_activity_linked(char name[MAX_LENGTH], int type, char location[MAX_LENGTH], char schedule[MAX_LENGTH],
+                                     char review[MAX_LENGTH_REVIEW], int stars, float price, char username[MAX_LENGTH], ActivityLinked* first){
+    ActivityLinked* c = (ActivityLinked*) malloc(sizeof(ActivityLinked)); // Reservamos memoria para ActivityLinked
+    c->activity = (Activity*) malloc(sizeof(Activity)); // Reservamos memoria para Activity
+    strcpy(c->activity->name, name);
+    strcpy(c->activity->location, location);
+    strcpy(c->activity->schedule, schedule);
+    strcpy(c->activity->review, review);
+    strcpy(c->activity->username, username);
+    c->activity->stars = stars;
+    c->activity->type = type;
+    c->activity->price = price;
+    c->next = NULL;
+    if (first != NULL){
+        ActivityLinked* last = get_last_activity(first);
+        last->next = c;
     }
-    return NULL; // Si ha habido algún error, devuelve NULL
 }
 
 /**
@@ -122,7 +122,6 @@ ActivityLinked* init_activity_list() {
  * Pre: recibe un puntero a una actividad
  * Post:
  */
-
 int save_activity(Activity* activity){
     // Abrimos el fichero de usuarios
     int f1 = SUCCESS, exit = 0;
@@ -140,7 +139,14 @@ int save_activity(Activity* activity){
     return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
 }
 
-
+/**
+ *
+ * @param first_u
+ * @param first_a
+ *
+ * Pre:
+ * Post:
+ */
 void save_content_at_user(UserLinked* first_u, ActivityLinked* first_a){
     UserLinked* actual_user = NULL;
     while (first_a->activity != NULL){
@@ -156,16 +162,13 @@ void save_content_at_user(UserLinked* first_u, ActivityLinked* first_a){
     }
 }
 
-
-const char* get_type(int num){
-    if(num == 1) return "Ciencia";
-    else if(num == 2) return "Gastronomia";
-    else if(num == 3) return "Cultura";
-    else if(num == 4) return "Deporte";
-    else if(num == 5) return "Musica";
-    return NULL;
-}
-
+/**
+ *
+ * @param activity
+ *
+ * Pre:
+ * Post:
+ */
 void print_content(Activity* activity){
 
     printf("%s", BARS);
@@ -181,10 +184,51 @@ void print_content(Activity* activity){
     printf("\n%s\n", BARS);
 }
 
+/**
+ *
+ * @param a
+ *
+ * Pre:
+ * Post:
+ */
 void print_all_publications(ActivityLinked* a){
     ActivityLinked* temp = a;
     while(temp != NULL){
         print_content(temp->activity);
         temp = temp->next;
     }
+}
+
+/******** FUNCIONES AUXILIARES (implementadas en varias funciones) ********/
+/**
+ *
+ * @param first
+ * @return
+ *
+ * Pre: recibe un puntero a la primera actividad
+ * Post: devuelve un puntero a la última actividad del usuario
+ */
+ActivityLinked* get_last_activity(ActivityLinked* first){
+    ActivityLinked* temp = first;
+    while (temp->next != NULL){
+        temp = temp->next;
+    }
+    return temp;
+}
+
+/**
+ *
+ * @param num
+ * @return
+ *
+ * Pre:
+ * Post:
+ */
+const char* get_type(int num){
+    if(num == 1) return "Ciencia";
+    else if(num == 2) return "Gastronomia";
+    else if(num == 3) return "Cultura";
+    else if(num == 4) return "Deporte";
+    else if(num == 5) return "Musica";
+    return NULL;
 }
