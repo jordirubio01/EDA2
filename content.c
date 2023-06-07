@@ -10,7 +10,7 @@
  * Pre: -
  * Post: Lista dinámica con todas las actividades creada; devuelve un puntero a la primera actividad del usuario
  */
-ActivityLinked* init_activity_list() {
+ActivityLinked* init_activity_list(UserLinked* u) {
     ActivityLinked *first_a; // Primer usuario
     // Datos de cada usuario
     char name[MAX_LENGTH], location[MAX_LENGTH], schedule[MAX_LENGTH], review[MAX_LENGTH_REVIEW], username[MAX_LENGTH];
@@ -28,12 +28,12 @@ ActivityLinked* init_activity_list() {
         fscanf(f, "%s %d %s %s %d %f %s", name, &type, location, schedule, &stars, &price, username);
         fgetc(f); // Ignoramos el carácter '\n'
         fgets(review, MAX_LENGTH_REVIEW, f);
-        first_a = make_activity_linked(name, type, location, schedule, review, stars, price, username, NULL);
+        first_a = make_activity_linked(name, type, location, schedule, review, stars, price, username, NULL, u);
         // Resto de usuarios
         while (fscanf(f, "%s %d %s %s %d %f %s", name, &type, location, schedule, &stars, &price, username) > 6) { //Mientras los datos coincidan.
             fgetc(f); // Ignoramos el carácter '\n'
             fgets(review, MAX_LENGTH_REVIEW, f);
-            make_activity_linked(name, type, location, schedule, review, stars, price, username, first_a);
+            make_activity_linked(name, type, location, schedule, review, stars, price, username, first_a, u);
         }
         fclose(f); //Cerramos el fichero f
         return first_a;
@@ -51,7 +51,7 @@ ActivityLinked* init_activity_list() {
  * Pre: recibe un puntero a la primera actividad y un puntero al usuario
  * Post: una nueva actividad ha sido publicada
  */
-Activity* new_content(ActivityLinked* first, User* user){
+Activity* new_content(ActivityLinked* first, User* user, UserLinked* u){
     char name[MAX_LENGTH], location[MAX_LENGTH], schedule[MAX_LENGTH], review[MAX_LENGTH_REVIEW];
     int stars, type;
     float price;
@@ -75,7 +75,7 @@ Activity* new_content(ActivityLinked* first, User* user){
     scanf("%d", &stars);
     printf("%s", BARS);
 
-    ActivityLinked* new_activity = make_activity_linked(name, type, location, schedule, review, stars, price, user->username, first);
+    ActivityLinked* new_activity = make_activity_linked(name, type, location, schedule, review, stars, price, user->username, first, u);
     save_activity(new_activity->activity);
     return new_activity->activity;
 }
@@ -97,7 +97,7 @@ Activity* new_content(ActivityLinked* first, User* user){
  * Post:
  */
 ActivityLinked* make_activity_linked(char name[MAX_LENGTH], int type, char location[MAX_LENGTH], char schedule[MAX_LENGTH],
-                                     char review[MAX_LENGTH_REVIEW], int stars, float price, char username[MAX_LENGTH], ActivityLinked* first){
+                                     char review[MAX_LENGTH_REVIEW], int stars, float price, char username[MAX_LENGTH], ActivityLinked* first, UserLinked* u){
     ActivityLinked* c = (ActivityLinked*) malloc(sizeof(ActivityLinked)); // Reservamos memoria para ActivityLinked
     c->activity = (Activity*) malloc(sizeof(Activity)); // Reservamos memoria para Activity
     strcpy(c->activity->name, name);
@@ -113,6 +113,7 @@ ActivityLinked* make_activity_linked(char name[MAX_LENGTH], int type, char locat
         ActivityLinked* last = get_last_activity(first);
         last->next = c;
     }
+    save_content_at_user(u, c);
     return c;
 }
 
@@ -164,6 +165,7 @@ void save_content_at_user(UserLinked* first_u, ActivityLinked* first_a){
     }
 }
 
+
 /**
  *
  * @param activity
@@ -180,7 +182,10 @@ void print_content(Activity* activity){
     printf("\nLocalidad: %s", activity->location);
     printf("\nHorario: %s h", activity->schedule);
     printf("\nPrecio:\t%.2f (euros)", activity->price);
-    printf("\nValoraci%cn [0-5]: %d", 162, activity->stars);
+    printf("\nValoraci%cn [0-5]:", 162);
+    for (int i = 0; i < activity->stars; i++){
+        printf("%c",3);
+    }
     printf("\nRese%ca: %s", 164, activity->review);
     printf("\n%s\n", BARS);
 }

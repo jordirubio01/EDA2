@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "dictionary.h"
-#define MAX_LENGTH_REVIEW 1000
+#define MAX_LENGTH_REVIEW 500
 #define TRUE 1
 #define FALSE 0
 

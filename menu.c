@@ -63,6 +63,10 @@ void load_option(int op, UserLinked* l_users, Request* l_requests, Stack* stack)
     else if (op == 3){  // Listar usuarios
         show_users(l_users);
     }
+    else if (op == 4){ // Dictionary
+        counter_of_words(dict);
+        //imprimir 10 palabras
+    }
     else printf("Por favor, introduce un n%cmero del 1 al 4.\n", 163);
 }
 
