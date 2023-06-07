@@ -15,18 +15,18 @@ Jordi Rubio Arbona - 266987
 
 ---
 ## LISTA DE CONTENIDOS
-+ 1. INTRODUCCIÓN
-+ 2. OBJETIVOS DEL PROYECTO
-    + 2.1. Objetivos obligatorios alcanzados
-    + 2.2. Objetivos deseables alcanzados
-    + 2.3. Objetivos exploratorios adquiridos
-+ 3. SOLUCIÓN
-    + 3.1. Arquitectura del sistema
-    + 3.2. Gestión de errores
-    + 3.3. Diseño del modelo de datos
-    + 3.4. Descripción y procesamiento del conjunto de datos
-+ 4. REFERENCIAS
-    + 4.1. Uso de inteligencia artificial	
++ **1.** INTRODUCCIÓN
++ **2.** OBJETIVOS DEL PROYECTO
+    + **2.1.** Objetivos obligatorios alcanzados
+    + **2.2.** Objetivos deseables alcanzados
+    + **2.3.** Objetivos exploratorios adquiridos
++ **3.** SOLUCIÓN
+    + **3.1.** Arquitectura del sistema
+    + **3.2.** Gestión de errores
+    + **3.3.** Diseño del modelo de datos
+    + **3.4.** Descripción y procesamiento del conjunto de datos
++ **4.** REFERENCIAS
+    + **4.1.** Uso de inteligencia artificial	
 
 ---
 ## 1. INTRODUCCIÓN 
