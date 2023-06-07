@@ -6,8 +6,8 @@
 #define LAB_0_USER_H
 #define MAX_LENGTH 25
 #define MAIL_LENGTH 50
-#define MAX_LENGTH_REVIEW 1000
-#define BARS "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#define MAX_LENGTH_REVIEW 500
+#define BARS "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 #define FILE_USERS "resources/users.txt"
 #define FILE_REQUESTS "resources/requests.txt"
 #define FILE_CONTENT "resources/content.txt"
@@ -50,7 +50,7 @@ typedef struct {
     char location[MAX_LENGTH];      // Ubicación
     int interests;                  // Intereses (recomendaremos usuarios afines)
     char friends[25][MAX_LENGTH];   // Amigos y amigas (máximo 50)
-    Activity* content;
+    ActivityLinked* content;
 } User;
 
 /// Estructura de lista enlazada de usuario

@@ -47,21 +47,22 @@ ActivityLinked* get_last_activity(ActivityLinked* first){
  * Pre: recibe un puntero a la primera actividad y un puntero al usuario
  * Post: una nueva actividad ha sido publicada
  */
-/*ActivityLinked* new_content(ActivityLinked* first, User* user){
+Activity* new_content(ActivityLinked* first, User* user){
     char name[MAX_LENGTH], location[MAX_LENGTH], schedule[MAX_LENGTH], review[MAX_LENGTH_REVIEW];
     int stars, type;
     double price;
 
     printf("Rellena la siguiente ficha t%cnica\n%s", 130, BARS);
-    printf("Nombre:");
+    printf("\nNombre:");
     scanf("%s", name);
-    printf("Localidad");
+    printf("\nLocalidad");
     scanf("%s", location);
-    printf("Horario [hh:mm - hh:mm]");
+    printf("\nHorario [hh:mm - hh:mm]");
     scanf("%s", schedule);
-    printf("Precio:");
-    scanf("%2lf", &price);
-    printf("1-Ciencia\n2-Gastronomia\n3-Cultura\n4-Deportes\n5-Musica\n%cmbito[Introduce Numero]:", 181);
+    printf("\nPrecio :");
+    scanf("%f", &price);
+    printf("\n%s", BARS);
+    printf("\n1-Ciencia\n2-Gastronomia\n3-Cultura\n4-Deportes\n5-Musica\n%s\n%cmbito[Introduce Numero]:", BARS, 181);
     scanf("%d", &type);
     printf("Opinion:");
     scanf("%s", review);
@@ -70,7 +71,8 @@ ActivityLinked* get_last_activity(ActivityLinked* first){
 
     ActivityLinked* new_activity = make_activity_linked(name, type, location, schedule, review, stars, price, user, first);
     save_activity(new_activity->activity);
-}*/
+    return new_activity->activity;
+}
 
 /**
  *
@@ -79,7 +81,7 @@ ActivityLinked* get_last_activity(ActivityLinked* first){
  * Pre: -
  * Post: Lista dinámica con todas las actividades creada; devuelve un puntero a la primera actividad del usuario
  */
-/*ActivityLinked* init_activity_list() {
+ActivityLinked* init_activity_list() {
     ActivityLinked *first_a; // Primer usuario
     // Datos de cada usuario
     char name[MAX_LENGTH], location[MAX_LENGTH], schedule[MAX_LENGTH], review[MAX_LENGTH_REVIEW], username[MAX_LENGTH];
@@ -105,8 +107,8 @@ ActivityLinked* get_last_activity(ActivityLinked* first){
         return first_a;
 
     }
-    return first_a; // Si ha habido algún error, devuelve NULL
-}*/
+    return NULL; // Si ha habido algún error, devuelve NULL
+}
 
 /**
  *
@@ -116,7 +118,7 @@ ActivityLinked* get_last_activity(ActivityLinked* first){
  * Pre: recibe un puntero a una actividad
  * Post:
  */
- /*
+
 int save_activity(Activity* activity){
     // Abrimos el fichero de usuarios
     int f1 = SUCCESS, exit = 0;
@@ -131,39 +133,53 @@ int save_activity(Activity* activity){
         return SUCCESS;
     }
     return FILE_NOT_FOUND; // Si ha habido algún error, lo retorna
-}*/
-
-/*
-ActivityLinked* c = (ActivityLinked*) malloc(sizeof(ActivityLinked));
-strcpy(c->activity->name, name);
-strcpy(c->activity->location, location);
-strcpy(c->activity->schedule, schedule);
-strcpy(c->activity->review, review);
-strcpy(c->activity->username, username);
-c->activity->stars = stars;
-c->activity->type = type;
-c->activity->price = price;
-c->next = NULL;
-if (first != NULL){
-ActivityLinked* last = get_last_activity(first);
-last->next = c;
-}
-}*/
-/*
-ActivityLinked* make_content_linked(UserLinked* first_u){
-    while(first_u->next != NULL){
-        ActivityLinked* c = (ActivityLinked*) malloc(sizeof(ActivityLinked));
-        first_u->user->content =
-    }
 }
 
 
 void save_content_at_user(UserLinked* first_u, ActivityLinked* first_a){
-    UserLinked* actual_user;
-    while (first_a != NULL){
+    UserLinked* actual_user = NULL;
+    while (first_a->activity != NULL){
+        UserLinked* users = first_u;
         actual_user = search_user(first_a->activity->username, first_u);
-        for (int i = 0; )
-        first_u->user->content[]
+        while (users->next != NULL){
+            if (strcmp(actual_user->user->username, users->user->username) == 0){
+                make_activity_linked(first_a->activity->name, first_a->activity->type, first_a->activity->location, first_a->activity->schedule, first_a->activity->review, first_a->activity->stars, first_a->activity->price, first_a->activity->username, actual_user->user->content);
+                users = users->next;
+            }
+            else users = users->next;
+        }
     }
+}
 
-}*/
+
+const char* get_type(int num){
+    if(num == 1) return "Ciencia";
+    else if(num == 2) return "Gastronomia";
+    else if(num == 3) return "Cultura";
+    else if(num == 4) return "Deporte";
+    else if(num == 5) return "Musica";
+    return NULL;
+}
+
+void print_content(Activity* activity){
+
+    printf("%s", BARS);
+    printf("\t\t\t\t\t\t\t\t%c%s%c", 34, activity->name, 34);
+    printf("\n%s", BARS);
+    printf("\nUsuario: %s", activity->username);
+    printf("\n%cmbito: %s", 181, get_type(activity->type));
+    printf("\nLocalidad: %s", activity->location);
+    printf("\nHorario: %s h", activity->schedule);
+    printf("\nPrecio:\t%.2f (euros)", activity->price);
+    printf("\nValoraci%cn [0-5]: %d", 162, activity->stars);
+    printf("\nRese%ca: %s", 164, activity->review);
+    printf("\n%s\n", BARS);
+}
+
+void print_all_publications(ActivityLinked* a){
+    ActivityLinked* temp = a;
+    while(temp != NULL){
+        print_content(temp->activity);
+        temp = temp->next;
+    }
+}

@@ -13,7 +13,7 @@ void show_first_menu(){ //El menú que aparece nada más entrar a la red social
  * Post: El menú completo ha sido imprimido por pantalla
  */
 void show_full_menu(){
-    printf("%s\n1.\tEnviar solicitud de amistad\n2.\tGestionar amigos/as\n3.\tPublicar\n4.\tGestionar publicaciones\n5.\tCerrar sesi%cn\n%s\n", BARS, 162, BARS);
+    printf("%s\n1.\tEnviar solicitud de amistad\n2.\tGestionar amigos/as\n3.\tHacer una publicaci%cn\n4.\tVer todas las publicaciones\n5.\tVer publicaciones de un amigo\n6.\tCerrar sesi%cn\n%s\n", BARS, 162, 162, BARS);
 }
 
 
@@ -61,6 +61,7 @@ void load_option(int op, UserLinked* l_users, Request* l_requests){ // Opciones 
  */
 // ESTA FUNCIÓN LA IMPLEMENTAREMOS EN load_option UNA VEZ SE HAYA INICIADO SESIÓN
 void load_user_option(int op, UserLinked* l_users, User* current_user, Request* l_requests){ // Opciones de usuario (ya ha iniciado sesión)
+    ActivityLinked* activities = init_activity_list();
     if (op == 1){       // Enviar solicitud de amistad
         char asked_user[MAX_LENGTH];
         printf("%cA qui%cn quieres agregar? Introduce su nombre de usuario:\n", 168, 130);
@@ -78,9 +79,17 @@ void load_user_option(int op, UserLinked* l_users, User* current_user, Request* 
         else if (friend_op == 2) view_requests(current_user, l_users, l_requests);
     }
     else if (op == 3){  // Realizar publicación
-        // FUNCIÓN
+        new_content(activities, current_user);
+        printf("\nPublicaci%cn realizada con %cxito", 162, 130);
     }
     else if (op == 4){  // Gestionar publicaciones
-        // FUNCIÓN
+        print_all_publications(activities);
+    }
+    else if (op == 5){
+        printf("\nEscribe el usuario de quien quieres ver sus publicaciones:");
+        char username[MAX_LENGTH];
+        scanf("%s", username);
+        UserLinked* x_user = search_user(username, l_users);
+        print_all_publications(x_user->user->content);
     }
 }
