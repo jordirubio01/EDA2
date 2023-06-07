@@ -1,8 +1,26 @@
 #ifndef LAB_0_MENU_H
 #define LAB_0_MENU_H
-#include "user.h"
+#include "content.h"
+#define MAX_SIZE 10
 
 #endif //LAB_0_MENU_H
+
+typedef struct{
+    int data[MAX_SIZE];
+    int top;
+}Stack;
+
+Stack* init_stack();
+
+int isEmpty(Stack* stack);
+
+int isFull(Stack* stack);
+
+Stack* push(Stack* stack, int element);
+
+Stack* pop(Stack* stack);
+
+int top(Stack* stack);
 
 void show_first_menu();
 
