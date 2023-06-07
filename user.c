@@ -151,7 +151,7 @@ User* login(UserLinked* first){
             return temp->user;
         }
         else{
-            printf("\nContrase%ca incorrecta.\n", 164);
+            printf("Contrase%ca incorrecta.\n", 164);
             return NULL;
         }
     }
@@ -245,6 +245,7 @@ UserLinked* make_user_linked(char name[MAX_LENGTH], char surname[MAX_LENGTH], ch
     for (int i = 0; i < 25; i++){
         strcpy(c->user->friends[i], " ");
     }
+    c->user->content = NULL;
     c->next = NULL;
     if (first != NULL){ //Si aún no existe ningún usuario...
         UserLinked *last = get_last_user(first);

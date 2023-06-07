@@ -5,6 +5,7 @@ int main() {
     UserLinked* l_users = init_list();
     init_friends(l_users);
     Request* l_requests = init_queue(l_users);
+    ActivityLinked* activities = init_activity_list(l_users);
     Stack* stack = init_stack();
 
     // Empieza el programa (inicio/registro/listar usuarios)
@@ -19,8 +20,8 @@ int main() {
     // Mostramos el menú
     show_first_menu();
     scanf("%d", &option);
-    while (option != 4){
-        load_option(option, l_users, l_requests, stack);
+    while (option != 5){
+        load_option(option, l_users, l_requests, activities, stack);
         show_first_menu();
         scanf("%d", &option);
     }

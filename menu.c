@@ -5,7 +5,7 @@
 * Post: El menú inicial ha sido imprimido por pantalla
 */
 void show_first_menu(){ //El menú que aparece nada más entrar a la red social
-    printf("%s\n1.\tIniciar sesi%cn\n2.\tRegistrarse\n3.\tListar usuarios\n4.\tSalir\n%s\n", BARS, 162, BARS);
+    printf("%s\n1.\tIniciar sesi%cn\n2.\tRegistrarse\n3.\tListar usuarios\n4.\tListar palabras m%cs frecuentes en la red social\n5.\tSalir\n%s\n", BARS, 162, 160, BARS);
 }
 
 /**
@@ -13,7 +13,7 @@ void show_first_menu(){ //El menú que aparece nada más entrar a la red social
  * Post: El menú completo ha sido imprimido por pantalla
  */
 void show_full_menu(){
-    printf("%s\n1.\tEnviar solicitud de amistad\n2.\tGestionar amigos/as\n3.\tHacer una publicaci%cn\n4.\tVer todas las publicaciones\n5.\tVer publicaciones de un amigo\n6.\tCerrar sesi%cn\n%s\n", BARS, 162, 162, BARS);
+    printf("%s\n1.\tEnviar solicitud de amistad\n2.\tGestionar amigos/as\n3.\tHacer una publicaci%cn\n4.\tVer todas las publicaciones\n5.\tVer publicaciones de un usuario\n6.\tCerrar sesi%cn\n%s\n", BARS, 162, 162, BARS);
 }
 
 
@@ -26,8 +26,9 @@ void show_full_menu(){
  * Post: Se ha realizado la opción correcta
  *
  */
-void load_option(int op, UserLinked* l_users, Request* l_requests, Stack* stack){ // Opciones iniciales (inicio y registro)
+void load_option(int op, UserLinked* l_users, Request* l_requests, ActivityLinked* activities, Stack* stack){ // Opciones iniciales (inicio y registro)
     User* logged_user;
+    Dictionary* dict = init_dictionary(SIZE_DICT);
     clock_t start, end;
     double total_time, total_sec;
     int total_min;
@@ -43,7 +44,7 @@ void load_option(int op, UserLinked* l_users, Request* l_requests, Stack* stack)
             show_full_menu();
             scanf("%d", &logged_option);
             while (logged_option != 6){
-                load_user_option(logged_option, l_users, logged_user, l_requests);
+                load_user_option(logged_option, l_users, logged_user, l_requests, activities);
                 show_full_menu();
                 scanf("%d", &logged_option);
             }
@@ -79,9 +80,9 @@ void load_option(int op, UserLinked* l_users, Request* l_requests, Stack* stack)
  * Post: Se ha ejecutado la opción escogida
  */
 // ESTA FUNCIÓN LA IMPLEMENTAREMOS EN load_option UNA VEZ SE HAYA INICIADO SESIÓN
-void load_user_option(int op, UserLinked* l_users, User* current_user, Request* l_requests){ // Opciones de usuario (ya ha iniciado sesión)
-    ActivityLinked* activities = init_activity_list();
-    if (op == 1){       // Enviar solicitud de amistad
+void load_user_option(int op, UserLinked* l_users, User* current_user, Request* l_requests, ActivityLinked* activities){ // Opciones de usuario (ya ha iniciado sesión)
+    // Enviar solicitud de amistad
+    if (op == 1){
         char asked_user[MAX_LENGTH];
         printf("%cA qui%cn quieres agregar? Introduce su nombre de usuario:\n", 168, 130);
         scanf("%s", asked_user);
@@ -90,26 +91,31 @@ void load_user_option(int op, UserLinked* l_users, User* current_user, Request* 
         else make_request(asked_user, current_user->username, l_requests, l_users);
         save_requests(l_requests);
     }
-    else if (op == 2){  // Gestionar solicitudes de amistad
+    // Gestionar solicitudes de amistad
+    else if (op == 2){
         int friend_op;
         printf("%s\n1.\tVer lista de amigos/as\n2.\tAceptar o rechazar solicitudes\n%s\n", BARS, BARS);
         scanf("%d", &friend_op);
         if (friend_op == 1) view_friends(current_user);
         else if (friend_op == 2) view_requests(current_user, l_users, l_requests);
     }
-    else if (op == 3){  // Realizar publicación
-        new_content(activities, current_user);
-        printf("Publicaci%cn realizada con %cxito\n", 162, 130);
+    // Realizar publicación
+    else if (op == 3){
+        new_content(activities, current_user, l_users);
+        printf("\nPublicaci%cn realizada con %cxito\n", 162, 130);
     }
-    else if (op == 4){  // Gestionar publicaciones
+    // Gestionar publicaciones
+    else if (op == 4){
         print_all_publications(activities);
     }
+    // Ver publicaciones de un usuario
     else if (op == 5){
-        printf("\nEscribe el usuario de quien quieres ver sus publicaciones:");
+        printf("Escribe el usuario de quien quieres ver sus publicaciones:\n");
         char username[MAX_LENGTH];
         scanf("%s", username);
         UserLinked* x_user = search_user(username, l_users);
-        print_all_publications(x_user->user->content);
+        if (x_user == NULL) printf("El usuario %s no existe.\n", username);
+        else print_all_publications(x_user->user->content);
     }
 }
 

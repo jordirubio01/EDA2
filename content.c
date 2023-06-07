@@ -150,18 +150,18 @@ int save_activity(Activity* activity){
  * Pre:
  * Post:
  */
-void save_content_at_user(UserLinked* first_u, ActivityLinked* first_a){
-    UserLinked* actual_user = NULL;
-    while (first_a->activity != NULL){
-        UserLinked* users = first_u;
-        actual_user = search_user(first_a->activity->username, first_u);
-        while (users->next != NULL){
-            if (strcmp(actual_user->user->username, users->user->username) == 0){
-                make_activity_linked(first_a->activity->name, first_a->activity->type, first_a->activity->location, first_a->activity->schedule, first_a->activity->review, first_a->activity->stars, first_a->activity->price, first_a->activity->username, actual_user->user->content);
-                users = users->next;
-            }
-            else users = users->next;
-        }
+void save_content_at_user(UserLinked* first_u, ActivityLinked* received_a){
+    UserLinked* current_user = search_user(received_a->activity->username, first_u);
+    ActivityLinked* a = (ActivityLinked*) malloc(sizeof(ActivityLinked));
+    a->activity = (Activity*) malloc(sizeof(Activity));
+    a->activity = received_a->activity;
+    a->next = NULL;
+    // Si el usuario aún no tiene publicaciones...
+    if (current_user->user->content == NULL) current_user->user->content = a; // La nueva publicación es la primera (y última)
+    // Si el usuario ya ha publicado antes...
+    else{
+        ActivityLinked* last = get_last_activity(current_user->user->content); // La nueva publicación es la última
+        last->next = a;
     }
 }
 
@@ -199,7 +199,7 @@ void print_content(Activity* activity){
  */
 void print_all_publications(ActivityLinked* a){
     ActivityLinked* temp = a;
-    while(temp != NULL){
+    while (temp != NULL){
         print_content(temp->activity);
         temp = temp->next;
     }
