@@ -12,7 +12,8 @@ ActivityLinked* init_activity_list();
 
 Activity* new_content(ActivityLinked* first, User* user);
 
-ActivityLinked* make_activity_linked(char name[MAX_LENGTH], int type, char location[MAX_LENGTH], char schedule[MAX_LENGTH], char review[MAX_LENGTH_REVIEW], int stars, float price, char username[MAX_LENGTH], ActivityLinked* first);
+ActivityLinked* make_activity_linked(char name[MAX_LENGTH], int type, char location[MAX_LENGTH], char schedule[MAX_LENGTH],
+                                     char review[MAX_LENGTH_REVIEW], int stars, float price, char username[MAX_LENGTH], ActivityLinked* first);
 
 int save_activity(Activity* activity);
 

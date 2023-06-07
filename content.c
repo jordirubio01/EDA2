@@ -54,25 +54,26 @@ ActivityLinked* init_activity_list() {
 Activity* new_content(ActivityLinked* first, User* user){
     char name[MAX_LENGTH], location[MAX_LENGTH], schedule[MAX_LENGTH], review[MAX_LENGTH_REVIEW];
     int stars, type;
-    double price;
+    float price;
 
-    printf("Rellena la siguiente ficha t%cnica\n%s", 130, BARS);
-    printf("\nNombre:");
+    printf("%s\nRellena la siguiente ficha t%cnica\n", BARS, 130);
+    printf("Nombre:\n");
     scanf("%s", name);
-    printf("\nLocalidad");
+    printf("Localidad:\n");
     scanf("%s", location);
-    printf("\nHorario [hh:mm - hh:mm]");
+    printf("Horario [hh:mm - hh:mm]:\n");
     scanf("%s", schedule);
-    printf("\nPrecio :");
+    printf("Precio:\n");
     scanf("%f", &price);
-    printf("\n%s", BARS);
-    printf("\n1-Ciencia\n2-Gastronomia\n3-Cultura\n4-Deportes\n5-Musica\n%s\n%cmbito[Introduce Numero]:", BARS, 181);
+    printf("%s", BARS);
+    printf("\n1-Ciencia\n2-Gastronomia\n3-Cultura\n4-Deportes\n5-Musica\n%s\n%cmbito [Introduce numero]:\n", BARS, 181);
     scanf("%d", &type);
-    printf("\nOpinion:");
-    //fgetc(f); // Ignoramos el carácter '\n'
+    printf("Opinion:\n");
+    fgetc(stdin);
     fgets(review, MAX_LENGTH_REVIEW, stdin);
-    printf("\nValoraci%cn [Estrellas (1-5)]:", 162);
+    printf("Valoraci%cn [Estrellas (1-5)]:\n", 162);
     scanf("%d", &stars);
+    printf("%s", BARS);
 
     ActivityLinked* new_activity = make_activity_linked(name, type, location, schedule, review, stars, price, user->username, first);
     save_activity(new_activity->activity);
@@ -112,6 +113,7 @@ ActivityLinked* make_activity_linked(char name[MAX_LENGTH], int type, char locat
         ActivityLinked* last = get_last_activity(first);
         last->next = c;
     }
+    return c;
 }
 
 /**
@@ -170,7 +172,6 @@ void save_content_at_user(UserLinked* first_u, ActivityLinked* first_a){
  * Post:
  */
 void print_content(Activity* activity){
-
     printf("%s", BARS);
     printf("\t\t\t\t\t\t\t\t%c%s%c", 34, activity->name, 34);
     printf("\n%s", BARS);

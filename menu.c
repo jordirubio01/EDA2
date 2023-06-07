@@ -95,7 +95,7 @@ void load_user_option(int op, UserLinked* l_users, User* current_user, Request* 
     }
     else if (op == 3){  // Realizar publicación
         new_content(activities, current_user);
-        printf("\nPublicaci%cn realizada con %cxito", 162, 130);
+        printf("Publicaci%cn realizada con %cxito\n", 162, 130);
     }
     else if (op == 4){  // Gestionar publicaciones
         print_all_publications(activities);
