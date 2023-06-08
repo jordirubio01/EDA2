@@ -98,7 +98,7 @@ void load_dictionary(Dictionary* dictionary, ActivityLinked* activity){
 void most_used_words(Dictionary* dictionary){
     insertionSort(dictionary);
     printf("Las 10 palabras m%cs usadas son:\n", 160);
-    for (int i = 0; i < dictionary->counter && i < 10; i++){
+    for (int i = dictionary->counter-2; i > dictionary->counter-11; i--){
         printf("%s: %d repeticiones\n", dictionary->elements[i].word, dictionary->elements[i].repetitions);
     }
 }
@@ -106,12 +106,14 @@ void most_used_words(Dictionary* dictionary){
 /******** FUNCIONES DE ORDENACIÓN ********/
 void insertionSort(Dictionary* dictionary){
     int i, j;
-    for (i = 1; i < dictionary->counter; i++){
-        j = i - 1;
-        while (j >= 0 && dictionary->elements[j].repetitions < dictionary->elements[i].repetitions){
-            dictionary->elements[j + 1] = dictionary->elements[j];
-            j = j - 1;
+    Word_Counter temp;
+    for (i = 0; i < dictionary->counter; i++){
+        j = i;
+        while (j >= 0 && dictionary->elements[j-1].repetitions > dictionary->elements[j].repetitions){
+            temp = dictionary->elements[j - 1];
+            dictionary->elements[j - 1] = dictionary->elements[j];
+            dictionary->elements[j] = temp;
+            j--;
         }
-        dictionary->elements[j + 1] = dictionary->elements[i];
     }
 }
