@@ -164,7 +164,7 @@ Para el inicio de sesión hemos dedicado aproximadamente 4 horas.
 
 ---
 ## 3. SOLUCIÓN
-### Arquitectura del sistema
+### 3.1. Arquitectura del sistema
 
 Esta red social consta de distintas partes de código. Veamos una a una:
 
