@@ -56,7 +56,7 @@ Activity* new_content(ActivityLinked* first, User* user, UserLinked* u){
     int stars, type;
     float price;
 
-    printf("%s\nRellena la siguiente ficha t%cnica\n", BARS, 130);
+    printf("%s\nRellena la siguiente ficha t%ccnica\n", BARS, 130);
     printf("Nombre:\n");
     scanf("%s", name);
     printf("Localidad:\n");
