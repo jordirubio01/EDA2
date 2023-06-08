@@ -15,21 +15,21 @@ Jordi Rubio Arbona - 266987
 
 ---
 ## LISTA DE CONTENIDOS
-+ INTRODUCCIÓN
-+ OBJETIVOS DEL PROYECTO
-    + Objetivos obligatorios alcanzados
-    + Objetivos deseables alcanzados
-    + Objetivos exploratorios adquiridos
-+ SOLUCIÓN
-    + Arquitectura del sistema
-    + Gestión de errores
-    + Diseño del modelo de datos
-    + Descripción y procesamiento del conjunto de datos
-+ REFERENCIAS
-    + Uso de inteligencia artificial	
++ **1.** INTRODUCCIÓN
++ **2.** OBJETIVOS DEL PROYECTO
+    + **2.1.** Objetivos obligatorios alcanzados
+    + **2.2.** Objetivos deseables alcanzados
+    + **2.3.** Objetivos exploratorios adquiridos
++ **3.** SOLUCIÓN
+    + **3.1.** Arquitectura del sistema
+    + **3.2.** Gestión de errores
+    + **3.3.** Diseño del modelo de datos
+    + **3.4.** Descripción y procesamiento del conjunto de datos
++ **4.** REFERENCIAS
+    + **4.1.** Uso de inteligencia artificial	
 
 ---
-## INTRODUCCIÓN 
+## 1. INTRODUCCIÓN 
 **Culture Lovers** es una red social donde los usuarios pueden publicar opiniones sobre viajes, hoteles, gastronomía, monumentos y actividades culturales. En sus inicios, este proyecto podría parecer ambicioso, pero los resultados han sido verdaderamente acertados.
 
 Una de las principales dificultades que se nos han presentado en la programación de esta red social ha sido la gestión de datos, su inicialización y almacenamiento. Sin embargo, hemos logrado superarlas con el uso de archivos externos .txt, que permiten guardar información y escanearla de manera relativamente cómoda. Además, nos hemos aprovechado de varias estructuras y listas enlazadas  para trabajar con los datos una vez iniciada la ejecución. Cabe destacar que también nos ha resultado útil la definición de constantes con las direcciones de los archivos correspondientes, ya que hemos podido trabajar con ellas de manera más concisa.
@@ -41,8 +41,8 @@ En cuanto a la parte estética de la red social, hemos usado una constante BARS,
 En último lugar, cabe decir que se han superado todas las adversidades encontradas a lo largo del proyecto, se ha obtenido una red social funcional y atractiva para la experiencia del usuario. A lo largo del informe encontraréis más información al respecto.
 
 ---
-## OBJETIVOS DEL PROYECTO 
-### Objetivos obligatorios alcanzados 
+## 2. OBJETIVOS DEL PROYECTO 
+### 2.1. Objetivos obligatorios alcanzados 
 **1. Lista, pila y cola:**
 Hemos usado diferentes estructuras de datos para este proyecto:
 
@@ -66,7 +66,7 @@ Si no usáramos una pila, nos tendríamos que ayudar de muchas variables para ir
 
     + Hemos tardado alrededor de 1 hora.
 
-    + Las funciones auxiliares asociadas a la pila las encontramos a partir de la línea 113 del archivo menu.c.
+    + Las funciones auxiliares asociadas a la pila las encontramos en las líneas 123-166 del archivo menu.c.
 
 + Colas:
 
@@ -84,7 +84,7 @@ Hemos implementado el algoritmo de búsqueda LinearSearch en una función auxili
 
 Para alcanzar este objetivo, hemos necesitado alrededor de 30 minutos. 
 
-Nuestra función search_user, que usa el algoritmo de LinearSearch, se encuentra en la línea 571 del archivo user.c. 
+Nuestra función search_user, que usa el algoritmo de LinearSearch, se encuentra en las líneas 589-598 del archivo user.c.
 
 **3. Algoritmo de ordenación:**
 
@@ -108,7 +108,7 @@ Todas las partes importantes del código están comentadas correctamente. Por ot
 
 
 
-### Objetivos deseables alcanzados
+### 2.2. Objetivos deseables alcanzados
 **1. Leer datos de una fuente externa**
 
 Hemos implementado la funcionalidad de leer datos de una fuente externa, como es un archivo de texto. Esto lo usamos por ejemplo para añadir un grupo de usuarios a la red social. Tenemos un archivo llamado users.txt, y en la función init_list abrimos el archivo en modo read y vamos añadiendo los datos en una lista enlazada. También hemos usado la funcionalidad de leer datos de una fuente externa en más casos, como por ejemplo para recuperar las amistades, las peticiones de amistad, y publicaciones.
@@ -135,7 +135,7 @@ La función init_list se encuentra en la línea 12, init_friends en la línea 53
 
 Finalmente, para calcular el tiempo total que ha pasado una persona en la red social, usamos la función clock() en el main, que está ubicado en la línea 3 del archivo main.c.
 
-### Objetivos exploratorios adquiridos
+### 2.3. Objetivos exploratorios adquiridos
 **1. Capa estética**
 
 Como bien se comenta en la guía de este proyecto, a pesar de usar la consola, es posible ofrecer una experiencia algo más agradable para el usuario.
@@ -163,5 +163,95 @@ Estas funcionalidades se realizan a partir de las funciones login (líneas 135-1
 Para el inicio de sesión hemos dedicado aproximadamente 4 horas.
 
 ---
+## 3. SOLUCIÓN
+### 3.1. Arquitectura del sistema
+
+Esta red social consta de distintas partes de código. Veamos una a una:
+
+#### main.c
++ Este el fichero principal. En primer lugar, inicializamos las estructuras descritas en la sección 2.1. (lista enlazada de usuarios, amigos, peticiones de amistad, actividades, stack). Después de imprimir la pantalla de carga inicial y de declarar distintas variables, se muestra el menú inicial. También es donde se imprime el mensaje final.
+#### menu.c/h
++ Esta parte del código contiene funcionalidades sencillas. Aquí es donde están definidos los menús y donde se procesan las opciones escogidas por los usuarios. Adicionalmente, también se encuentra una estructura de pila y sus funciones, que se usa para almacenar el tiempo de ejecución en varios tramos del programa (inicio del programa e inicio de sesión).
+#### user.c/h
++ Esta es la sección más importante del programa. Aquí es donde se encuentran todas las funcionalidades relacionadas con los usuarios: inicialización, registro y gestión de usuarios, amigos, peticiones. En particular, en user.h se encuentran las estructuras: Activity, ActivityLinked, User, UserLinked y Request. Además, la mayoría de librerías (<string.h>, <stdio.h> y <stdlib.h>, entre otras), direcciones de archivos externos y constantes están definidas en este header.
+#### content.c/h
++ Esta parte del código no es tan densa como la anterior, pero también es compleja a nivel de carga y guardado de datos —encontramos funciones de inicialización, creación, guardado e impresión de actividades (o publicaciones), entre otras funciones—.
+#### dictionary.c/h
++ Por último, no se debe subestimar esta sección de código, ya que aquí no solamente se encuentran estructuras de diccionario y palabras, sino también funciones de ordenamiento ciertamente sofisticadas. Además, esta función también incluye ciertas constantes propias usadas para la gestión de palabras.
 
 
+```mermaid
+  graph TD;
+      main.c-->menu.c/h;
+      menu.c/h-->user.c/h;
+      user.c/h-->content.c/h;
+      user.c/h-->dictionary.c/h;
+      menu.c/h --> main.c;
+      user.c/h --> menu.c/h;
+      content.c/h --> user.c/h;
+      dictionary.c/h --> user.c/h;
+```
+
+En cuanto a las estructuras usadas en este proyecto, véanse los siguientes diagramas (se incluyen las estructuras más complejas):
+
+```mermaid
+  graph TD;
+      Activity-->ActivityLinked;
+      ActivityLinked-->User
+      User-->UserLinked
+```
+
+```mermaid
+  graph TD;
+      Request-->Request;
+      Request-->Request;
+```
+
+```mermaid
+  graph TD;
+      Word_Counter-->Dictionary;
+```
+
+### 3.1. Gestión de errores
+A lo largo de la memoria hemos explicado distintos problemas planteados y sus soluciones. No obstante, es acertado profundizar en el tema:
+
++ **Errores en la gestión de archivos**: Siempre que usemos datos de archivos externos —en este proyecto, todos los archivos externos son de tipo .txt—, ya sea para inicializar estructuras o bien almacenarlos, comprobamos que el archivo en cuestión se haya abierto de manera correcta. En particular, podemos centrarnos en la función init_list (líneas 12-43, user.c), donde no escaneamos los datos del archivo externo si no se ha podido abrir adecuadamente, ayudándonos de las constantes SUCCESS y FILE_NOT_FOUND, definidas en user.h. Este procedimiento se sigue en varias funciones, como fill_profile, init_friends, save_user, o save_requests.
++ **Errores en el inicio de sesión**: En algunas funciones, es necesario un nombre de usuario existente, como en el caso de la función login (líneas 135-158, user.c), que recibe una lista enlazada de usuarios. Para evitar problemas, antes de empezar a operar con la estructura de datos, comprobamos si el nombre de usuario se encuentra en ella. Si el nombre es erróneo, la función termina y evitamos errores futuros —cabe puntualizar que a lo largo del proyecto hemos tenido algunos errores de este tipo, por ello nos hemos esforzado en evitarlos en la medida de lo posible—.
++ **Errores en el registro de usuario**: De forma opuesta a la anterior funcionalidad, en el registro de un nuevo usuario, concretamente en la función fill_profile (líneas 182-217, user.c), comprobamos que el nuevo nombre de usuario no se haya usado.
++ **Errores al añadir a un usuario**: De manera parecida al inicio de sesión, las solicitudes de amistad pueden conllevar errores si no se introduce un nombre de usuario correcto. En este caso, dentro de la función make_request (líneas 313-365, user.c) no solo comprobamos que el usuario exista, sino también que no se haya enviado o recibido la misma solicitud anteriormente o que ambos no sean amigos ya.
++ **Errores de acceso a memoria**: Otros errores habituales son los de acceso a memoria. Estos los hemos evitado usando condiciones o bucles que eviten la manipulación de variables o punteros nulos. Por ejemplo, en la función search_user (líneas 589-598, user.c), iteramos sobre la lista enlazada de usuarios hasta que encontremos un valor nulo (si intentamos acceder más allá, aparecerá un error de Segmentation Fault).
+
+
+### 3. 2. Diseño del modelo de datos
+Tal y como hemos descrito en secciones anteriores, el problema de carga y almacenamiento de datos (ya sean usuarios, solicitudes de amistad o publicaciones, entre otros) lo hemos solucionado usando ficheros externos tipo .txt (vea el siguiente apartado para más detalle). Una representación del uso del acceso a estos datos puede ser:
+
+```mermaid
+  graph TD;
+      users.txt-->User;
+      friends.txt-->User;
+      User-->UserLinked;
+      content.txt-->Activity;
+      Activity-->ActivityLinked;
+      ActivityLinked-->User;
+```
+
+```mermaid
+  graph TD;
+      requests.txt-->Request;
+```
+### 3. 3. Descripción y procesamiento del conjunto de datos
+
+En nuestro proyecto usamos un total de 4 archivos externos desde los cuales cargamos datos o guardamos datos:
++ **“users.txt”**: En este archivo se guardan los usuarios que existen en nuestra red social, con toda su información respectiva (nombre, apellido, username, contraseña, fecha de nacimiento, correo, ciudad e intereses). Cada vez que un usuario nuevo se registra, toda la información que este usuario rellena en su perfil se guarda directamente en este archivo, de manera que siempre tenemos la lista de todos los usuarios con su respectiva información. Este archivo se ve reflejado en la consola en el momento en el que listamos todos los usuarios (teniendo en cuenta que en este caso no se ve la contraseña del usuario para mantener la privacidad). Se lee en init_list y se almacenan nuevos datos en save_user.
++ **”requests.txt”**: El fichero contiene las solicitudes de amistad pendientes entre usuarios —el primer usuario es el receptor, y el segundo quien ha enviado la solicitud—. Para evitar errores cuando no haya solicitudes pendientes (todas aceptadas o rechazadas), este contiene un encabezado “Receiver Sender” que se ignorará al trabajar en las funciones. Se lee en init_queue y se guarda en save_requests.
++ **“friends.txt”**: Este archivo contiene las relaciones de amistad entre usuarios —para ahorrar memoria, solo se guardan en una dirección, concretamente en el primer usuario es quien recibió la solicitud en su momento, y el segundo quien la envió—. Este está encabezado por “User1 User2”, datos que ignoramos en las funciones. Se lee en init_friends y se guardan datos en save_friends.
++ **”content.txt”**: Este último fichero tiene distintos datos sobre cada publicación en la red social. Cada publicación tiene una línea que contiene su nombre, tipo, localización, horario, precio, valoración y usuario, y otra línea con la opinión del usuario. Se lee en init_activity_list y se almacenan datos en él con la función save_activity.
+
+
+---
+## 4. REFERENCIAS
+### Uso de inteligencia artificial
+Para algunas partes de este proyecto nos hemos ayudado de herramientas de inteligencia artificial, como ChatGPT:
++ Diccionario: A la hora de hacer el diccionario, nos encontramos con algunas dificultades que no supimos solucionar. Una de estas dificultades fue cómo separar las palabras en las publicaciones para poder clasificarlas según su uso. Le preguntamos a ChatGPT si había alguna manera de separar las palabras, y fue entonces cuando nos recomendó usar la función strtok, de la librería string.h. Pero en ese momento, nos encontramos con otro problema, y es que la función strtok solo admite un delimitador, es decir, un único carácter como criterio para separar las palabras. Sin embargo, en una publicación de nuestra red social se usarán muchos más caracteres para separar palabras, como signos de puntuación (",", ".", "!", "?"). Así que, para resolver este problema, le pedimos a ChatGPT que nos diese otra alternativa con el propósito de usar más delimitadores. Finalmente, en la versión final del programa, usamos una string llamada delimiters y la pasamos como segundo parámetro en la función strtok. 
+
+---
